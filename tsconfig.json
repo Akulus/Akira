@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"declaration": false,
+		"removeComments": false,
+		"alwaysStrict": true,
+		"pretty": true,
+		"target": "es2019",
+		"lib": [
+			"esnext",
+			"esnext.array",
+			"esnext.asynciterable",
+			"esnext.intl",
+			"esnext.symbol"
+		],
+		"outDir": "dist",
+		"incremental": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"noEmitHelpers": true,
+		"importHelpers": true,
+		"esModuleInterop": true,
+		"strictNullChecks": false
+	}
+}

@@ -1,0 +1,53 @@
+{
+  "name": "akira",
+  "version": "1.0.0",
+  "description": "Akira is an easy to understand, rich in features music bot that aims to get highest quality music stream on Discord.",
+  "main": "dist/akira.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:fix": "npx prettier --write src && npx eslint src --ext .ts --fix",
+    "lint": "npx eslint src --ext .ts",
+    "build": "npx eslint src --ext .ts && tsc",
+    "start": "node dist/akira.js",
+    "install:ubuntu": "sudo npm install --unsafe-perm",
+    "install": "npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Razzels0/Akira.git"
+  },
+  "keywords": [
+    "discord bot",
+    "music bot",
+    "discord music bot",
+    "eris bot",
+    "eris",
+    "heroku",
+    "akira"
+  ],
+  "author": "Razzels <krzysztof.rapior@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Razzels0/Akira/issues"
+  },
+  "homepage": "https://github.com/Razzels0/Akira#readme",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.2",
+    "bufferutil": "^4.0.1",
+    "dotenv": "^8.2.0",
+    "eris": "^0.13.3",
+    "erlpack": "github:abalabahaha/erlpack",
+    "sodium-native": "^3.2.0",
+    "tslib": "^2.0.1",
+    "zlib-sync": "^0.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "@types/ws": "^7.2.6",
+    "@typescript-eslint/eslint-plugin": "^3.9.0",
+    "@typescript-eslint/parser": "^3.9.0",
+    "eslint": "^7.6.0",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.7"
+  }
+}

@@ -1,0 +1,27 @@
+module.exports = {
+    'env': {
+        'commonjs': true,
+        'es2020': true,
+        'node': true
+    },
+    'extends': [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended'
+    ],
+    'parser': '@typescript-eslint/parser',
+    'parserOptions': {
+        'ecmaVersion': 2019
+    },
+    'plugins': [
+        '@typescript-eslint'
+    ],
+    'rules': {
+        '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-unused-vars': 'off', // I know that this can be a little controversy
+        'quotes': ['error', 'single'],
+        'semi': ['error', 'always'],
+        //'curly': ['warn', 'all'],
+        'eqeqeq': ['error', 'always']
+    }
+};

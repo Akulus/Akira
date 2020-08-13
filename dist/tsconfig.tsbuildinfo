@@ -232,8 +232,8 @@
         "affectsGlobalScope": false
       },
       "../src/typings/command.d.ts": {
-        "version": "5110d7bef18d6cdc851532b97f7d1215fe61b0c334ed7d4d09994cdb3ab2fc32",
-        "signature": "5110d7bef18d6cdc851532b97f7d1215fe61b0c334ed7d4d09994cdb3ab2fc32",
+        "version": "18aa6910d2d5a4b109b32ec4b92b1d6a79fc65501c335b3b1c9419dff7ddf98b",
+        "signature": "18aa6910d2d5a4b109b32ec4b92b1d6a79fc65501c335b3b1c9419dff7ddf98b",
         "affectsGlobalScope": false
       },
       "../src/services/commandHandler.ts": {
@@ -247,13 +247,23 @@
         "affectsGlobalScope": false
       },
       "../src/services/commandParser.ts": {
-        "version": "f13fd1939bd0e64c0b79a3131959bba87c2a9a3c2d03084bac45500f7f3b3971",
-        "signature": "f46d2a2df582ed34a0c9a80fd9aa0e600cf9126c1f9ee9ed76afeda5dbc83f72",
+        "version": "6cf3d51760ee40516f480c9e89990fe714d394d5cc15c845d5697f15828704c6",
+        "signature": "84b7a135e1de8f8b42ecba3f4676a8981e215fa9b994caab1f1c038442a583b4",
         "affectsGlobalScope": false
       },
       "../src/akira.ts": {
-        "version": "452c93456085edc13d61aa05a459c16c4cc0edb3e8b88fbe9afa9d089dfc6b59",
+        "version": "07a3b71985602155920074e70955067e5dc8781f0ad0d11700b4f9b1c60d3be0",
         "signature": "5c9cd8ba4f81982e8002c709ba0f6675b7aaf1def7f8a98a9996040a3e1c2bc0",
+        "affectsGlobalScope": false
+      },
+      "../src/commands/owner/evaluate.ts": {
+        "version": "dcb00ee2d217cbcd6f75b658c95a3ca08ed73e9f7f31af24b0bfe19d9500da8f",
+        "signature": "2030308572b52967f7d1e3c16bb92b7b768838c6e52bf7c49c6e692627dd6c9f",
+        "affectsGlobalScope": false
+      },
+      "../src/commands/util/usage.ts": {
+        "version": "f5d9f30534a4ca43e241d39e1159d788a9f322a515deead609798f17f3cafb09",
+        "signature": "9595a4dffe6a305aec4901bc608276de2a58be891f476b87860f96823479a15f",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/color-name/index.d.ts": {
@@ -1467,6 +1477,26 @@
         "../src/services/commandParser.ts",
         "../src/services/test/dotenv-config.ts"
       ],
+      "../src/commands/owner/evaluate.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/eris/index.d.ts",
+        "../src/services/client.ts"
+      ],
+      "../src/commands/util/usage.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/eris/index.d.ts",
+        "../src/services/client.ts"
+      ],
       "../src/services/client.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/process.d.ts",
@@ -2438,6 +2468,14 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../src/commands/owner/evaluate.ts": [
+        "../node_modules/eris/index.d.ts",
+        "../src/services/client.ts"
+      ],
+      "../src/commands/util/usage.ts": [
+        "../node_modules/eris/index.d.ts",
+        "../src/services/client.ts"
+      ],
       "../src/services/client.ts": [
         "../node_modules/eris/index.d.ts",
         "../src/typings/command.d.ts",
@@ -2570,6 +2608,8 @@
       "../node_modules/typescript/lib/lib.esnext.promise.d.ts",
       "../node_modules/typescript/lib/lib.esnext.string.d.ts",
       "../src/akira.ts",
+      "../src/commands/owner/evaluate.ts",
+      "../src/commands/util/usage.ts",
       "../src/services/client.ts",
       "../src/services/commandHandler.ts",
       "../src/services/commandParser.ts",

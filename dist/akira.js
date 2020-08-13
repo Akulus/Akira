@@ -9,6 +9,6 @@ async () => await dotenv_config_1.default();
 // Initialize client
 const client = new client_1.default();
 // Message event catcher
-client.on('messageCreate', (message) => commandParser_1.default(client, message));
+client.on('messageCreate', async (message) => await commandParser_1.default(client, message));
 // Link start
 client.init();

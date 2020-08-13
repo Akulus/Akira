@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function validateMessage(client, message) {
+/**
+ * Run basic check for message conditions.
+ * @param client {AkiraClient}
+ * @param message {Message}
+ * @returns {Promise<void>}
+ */
+async function validateMessage(client, message) {
     // Gate 1 - Basic check if bot is a human & if this is a guild channel
     if (message.author.bot || !message.guildID)
-        return;
-    //test <===================================================
-    if (!validatePermissions(message, 0, client.config.playerOptions.djRoleName, client.config.botOptions.owners))
         return;
     // Gate 2 - Check if bot is restricted to owners only (personal)
     if (client.config.botOptions.isPersonal && !client.config.botOptions.owners.includes(message.author.id))
@@ -76,8 +79,6 @@ function validatePermissions(message, reqLevel, djRoleName, ownerList) {
     // Calculate perms for bot Owners
     if (ownerList.includes(message.author.id))
         memberLevel = 3;
-    // TEST <==========================================================================
-    console.log(`Member: ${message.author.username}  |  Permission level: ${memberLevel}`);
     // Compare permission levels
     if (memberLevel >= reqLevel)
         return true;

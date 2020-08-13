@@ -2,7 +2,13 @@ import AkiraClient from './client';
 import { Message, Role } from 'eris';
 import commandTypes from '../typings/command';
 
-export default function validateMessage(client: AkiraClient, message: Message): void {
+/**
+ * Run basic check for message conditions.
+ * @param client {AkiraClient}
+ * @param message {Message}
+ * @returns {Promise<void>}
+ */
+export default async function validateMessage(client: AkiraClient, message: Message): Promise<void> {
     // Gate 1 - Basic check if bot is a human & if this is a guild channel
     if (message.author.bot || !message.guildID) return;
 

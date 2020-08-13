@@ -11,7 +11,7 @@ import validateMessage from './services/commandParser'
 const client = new AkiraClient();
 
 // Message event catcher
-client.on('messageCreate', (message: Message) => validateMessage(client, message));
+client.on('messageCreate', async (message: Message) => await validateMessage(client, message));
 
 // Link start
 client.init();

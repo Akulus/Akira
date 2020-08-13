@@ -6,7 +6,7 @@ interface commandTypes {
     examples?: string[]
     aliases?: string[]
     permissionLevel: number
-    cooldown: number
+    cooldown: number // Counted in seconds
     execute: Function //eslint-disable-line
 }
 

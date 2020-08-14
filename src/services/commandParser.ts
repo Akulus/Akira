@@ -1,5 +1,5 @@
 import AkiraClient from './client';
-import { Message, Role } from 'eris';
+import { Message, Role } from 'discord.js';
 import commandTypes from '../typings/command';
 
 /**
@@ -10,14 +10,13 @@ import commandTypes from '../typings/command';
  */
 export default async function validateMessage(client: AkiraClient, message: Message): Promise<void> {
     // Gate 1 - Basic check if bot is a human & if this is a guild channel
-    if (message.author.bot || !message.guildID) return;
+    if (message.author.bot || !message.guild) return;
 
     // Gate 2 - Check if bot is restricted to owners only (personal)
     if (client.config.botOptions.isPersonal && !client.config.botOptions.owners.includes(message.author.id)) return;
 
     // Gate 3 - Check if bot have permissions to even respond
-    // @ts-ignore <== @types/Eris are omega old and have missing a lot :/
-    if (!message.channel.permissionsOf(client.user.id).has('sendMessages')) return;
+    if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) return;
 
     // Gate 4 - Search for prefix (normal or mention)
     const prefix: string | undefined = getPrefix(client.user.id, message.content, client.config.botOptions.prefix);
@@ -26,7 +25,7 @@ export default async function validateMessage(client: AkiraClient, message: Mess
     // Gate 5 - Split message into elements + search if that command exist
     const args: string[] = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd: string = args.shift().toLowerCase();
-    const command: commandTypes | undefined = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+    const command: commandTypes | undefined = client.commands.find((c) => c.name === cmd || (c.aliases && c.aliases.includes(cmd)));
     if (!command) return;
 
     // Gate 6 - Chceck if that member have permission to execute this command
@@ -67,18 +66,17 @@ function getPrefix(clientID: string, content: string, prefix: string) {
  * @returns {boolean}
  */
 function validatePermissions(message: Message, reqLevel: number, djRoleName: string, ownerList: string[]): boolean {
-    const djRole: Role | undefined = message.member.guild.roles.find((role) => role.name === djRoleName);
+    const djRole: Role | undefined = message.guild.roles.cache.find((role) => role.name === djRoleName);
     let memberLevel = 0;
 
-    // Calculate perms for DJ's
-    if (djRole && message.member.roles.includes(djRole.id)) memberLevel = 1;
+    // Calculate perms for DJ
+    if (djRole && message.member.roles.cache.has(djRole.id)) memberLevel = 1;
 
-    // Calculate perms for Administators
-    if (message.member.permission.has('administrator')) memberLevel = 2;
-    else if (message.member.permission.has('manageGuild')) memberLevel = 2;
-    else if (message.author.id === message.member.guild.ownerID) memberLevel = 2;
+    // Calculate perms for Admin
+    if (message.member.hasPermission('ADMINISTRATOR') || message.member.hasPermission('MANAGE_GUILD') || message.member.id === message.guild.ownerID)
+        memberLevel = 2;
 
-    // Calculate perms for bot Owners
+    // Calculate perms for bot Owner
     if (ownerList.includes(message.author.id)) memberLevel = 3;
 
     // Compare permission levels

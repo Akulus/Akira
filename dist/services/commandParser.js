@@ -8,14 +8,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 async function validateMessage(client, message) {
     // Gate 1 - Basic check if bot is a human & if this is a guild channel
-    if (message.author.bot || !message.guildID)
+    if (message.author.bot || !message.guild)
         return;
     // Gate 2 - Check if bot is restricted to owners only (personal)
     if (client.config.botOptions.isPersonal && !client.config.botOptions.owners.includes(message.author.id))
         return;
     // Gate 3 - Check if bot have permissions to even respond
-    // @ts-ignore <== @types/Eris are omega old and have missing a lot :/
-    if (!message.channel.permissionsOf(client.user.id).has('sendMessages'))
+    if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES'))
         return;
     // Gate 4 - Search for prefix (normal or mention)
     const prefix = getPrefix(client.user.id, message.content, client.config.botOptions.prefix);
@@ -24,7 +23,7 @@ async function validateMessage(client, message) {
     // Gate 5 - Split message into elements + search if that command exist
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
-    const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+    const command = client.commands.find((c) => c.name === cmd || (c.aliases && c.aliases.includes(cmd)));
     if (!command)
         return;
     // Gate 6 - Chceck if that member have permission to execute this command
@@ -64,19 +63,15 @@ function getPrefix(clientID, content, prefix) {
  * @returns {boolean}
  */
 function validatePermissions(message, reqLevel, djRoleName, ownerList) {
-    const djRole = message.member.guild.roles.find((role) => role.name === djRoleName);
+    const djRole = message.guild.roles.cache.find((role) => role.name === djRoleName);
     let memberLevel = 0;
-    // Calculate perms for DJ's
-    if (djRole && message.member.roles.includes(djRole.id))
+    // Calculate perms for DJ
+    if (djRole && message.member.roles.cache.has(djRole.id))
         memberLevel = 1;
-    // Calculate perms for Administators
-    if (message.member.permission.has('administrator'))
+    // Calculate perms for Admin
+    if (message.member.hasPermission('ADMINISTRATOR') || message.member.hasPermission('MANAGE_GUILD') || message.member.id === message.guild.ownerID)
         memberLevel = 2;
-    else if (message.member.permission.has('manageGuild'))
-        memberLevel = 2;
-    else if (message.author.id === message.member.guild.ownerID)
-        memberLevel = 2;
-    // Calculate perms for bot Owners
+    // Calculate perms for bot Owner
     if (ownerList.includes(message.author.id))
         memberLevel = 3;
     // Compare permission levels

@@ -22,7 +22,6 @@ function handleCommands(client) {
                 command.category = dir.toLowerCase();
                 // Register new command
                 client.commands.set(command.name, command);
-                command.aliases.forEach((alias) => client.aliases.set(alias, command.name));
                 client.log(`Loaded ${path_1.join(mainFile, dir, file)}`);
             }
             else {

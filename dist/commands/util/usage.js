@@ -12,6 +12,6 @@ module.exports = {
      * @returns {Promise<void>}
      */
     async execute(client, message, args) {
-        client.createMessage(message.channel.id, `Memory usage: ${(process.memoryUsage().heapUsed / 1048576).toFixed(1)}MB`);
+        message.channel.send(`Memory usage: ${(process.memoryUsage().heapUsed / 1048576).toFixed(1)}MB`);
     }
 };

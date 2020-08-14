@@ -1,5 +1,5 @@
 import AkiraClient from '../../services/client';
-import { Message } from 'eris';
+import { Message } from 'discord.js';
 
 export = {
     description: 'Shows basic memory usage.',
@@ -15,6 +15,6 @@ export = {
      * @returns {Promise<void>}
      */
     async execute(client: AkiraClient, message: Message, args: string[]): Promise<void> {
-        client.createMessage(message.channel.id, `Memory usage: ${(process.memoryUsage().heapUsed / 1048576).toFixed(1)}MB`);
+        message.channel.send(`Memory usage: ${(process.memoryUsage().heapUsed / 1048576).toFixed(1)}MB`);
     }
 }

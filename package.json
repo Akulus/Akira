@@ -8,9 +8,7 @@
     "lint:fix": "npx prettier --write src && npx eslint src --ext .ts --fix",
     "lint": "npx eslint src --ext .ts",
     "build": "npx eslint src --ext .ts && tsc",
-    "start": "node dist/akira.js",
-    "install:ubuntu": "sudo npm install --unsafe-perm",
-    "install": "npm install"
+    "start": "node dist/akira.js"
   },
   "repository": {
     "type": "git",
@@ -20,8 +18,8 @@
     "discord bot",
     "music bot",
     "discord music bot",
-    "eris bot",
-    "eris",
+    "ffmpeg",
+    "discord.js",
     "heroku",
     "akira"
   ],
@@ -32,16 +30,15 @@
   },
   "homepage": "https://github.com/Razzels0/Akira#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
     "bufferutil": "^4.0.1",
     "chalk": "^4.1.0",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "eris": "^0.13.3",
-    "erlpack": "github:abalabahaha/erlpack",
+    "erlpack": "github:discordapp/erlpack",
+    "libsodium-wrappers": "^0.7.8",
     "simple-youtube-api": "^5.2.1",
-    "sodium-native": "^3.2.0",
     "tslib": "^2.0.1",
-    "ytdl-core": "^3.2.1",
+    "utf-8-validate": "^5.0.2",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {

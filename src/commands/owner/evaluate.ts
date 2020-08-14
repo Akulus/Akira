@@ -1,5 +1,5 @@
 import AkiraClient from '../../services/client';
-import { Message } from 'eris';
+import { Message } from 'discord.js';
 import { inspect } from 'util';
 
 export = {
@@ -18,8 +18,8 @@ export = {
      * @returns {Promise<void>}
      */
     async execute(client: AkiraClient, message: Message, args: string[]): Promise<void | Message> {
-        if (!args[0]) return message.channel.createMessage('Provide JavaScript code to run.');
-        if (args.join(' ').length > 1000) return message.channel.createMessage('Too many arguments! *(Max 1000)*');
+        if (!args[0]) return message.channel.send('Provide JavaScript code to run.');
+        if (args.join(' ').length > 1000) return message.channel.send('Too many arguments! *(Max 1000)*');
 
         try {
             let evaled: string | unknown = await eval(args.join(' '));
@@ -31,13 +31,13 @@ export = {
             const result: string = sanitize(evaled);
             if (result.length > 1900) {
                 console.log(result);
-                return message.channel.createMessage('🛠️ **[SUCCESS]** Your result has been sended into console because it\'s too long to display.');
+                return message.channel.send('🛠️ **[SUCCESS]** Your result has been sended into console because it\'s too long to display.');
             }
 
-            if (result || result !== '') return message.channel.createMessage(`🛠️ **[SUCCESS]** Result of evaluated code\n\`\`\`js\n${result}\n\`\`\``);
-            else return message.channel.createMessage('🛠️ **[SUCCESS]** Done.');
+            if (result || result !== '') return message.channel.send(`🛠️ **[SUCCESS]** Result of evaluated code\n\`\`\`js\n${result}\n\`\`\``);
+            else return message.channel.send('🛠️ **[SUCCESS]** Done.');
         } catch (error) {
-            return message.channel.createMessage(`🛠️ **[FAIL]** Result of evaluated code \n\`\`\`js\n${sanitize(error)}\n\`\`\``);
+            return message.channel.send(`🛠️ **[FAIL]** Result of evaluated code \n\`\`\`js\n${sanitize(error)}\n\`\`\``);
         }
     }
 }

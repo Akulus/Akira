@@ -27,7 +27,6 @@ function handleCommands(client: AkiraClient): void {
 
                 // Register new command
                 client.commands.set(command.name, command);
-                command.aliases.forEach((alias) => client.aliases.set(alias, command.name));
 
                 client.log(`Loaded ${join(mainFile, dir, file)}`);
             } else {

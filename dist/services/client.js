@@ -5,6 +5,7 @@ const discord_js_1 = require("discord.js");
 const optionsProvider_1 = tslib_1.__importDefault(require("./optionsProvider"));
 const logger_1 = tslib_1.__importDefault(require("./logger"));
 const commandHandler_1 = tslib_1.__importDefault(require("./commandHandler"));
+const player_1 = tslib_1.__importDefault(require("./player"));
 class AkiraClient extends discord_js_1.Client {
     constructor() {
         super({
@@ -28,6 +29,7 @@ class AkiraClient extends discord_js_1.Client {
         this.log = new logger_1.default().log;
         this.config = optionsProvider_1.default();
         this.commands = new discord_js_1.Collection();
+        this.player = new player_1.default(this);
     }
     /**
      * Initialize client construction.

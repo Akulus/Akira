@@ -2,7 +2,7 @@ import configTypes from '../typings/dotenv-config';
 
 /**
  * Return config object.
- * @returns {Promise<configTypes>}
+ * @returns {configTypes}
  */
 export default function getConfig(): configTypes {
     // Construct config object

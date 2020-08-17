@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../node_modules/discord.js/typings/index.d.ts": {
-        "version": "3ef2f64b3da62458ccfa701b5e564d27bccf0f86cbc07449b2538671bdae3ac1",
-        "signature": "3ef2f64b3da62458ccfa701b5e564d27bccf0f86cbc07449b2538671bdae3ac1",
+        "version": "453abbd598aa3aeac131ddad5e17dcf7aa29c38dd3da1aaad47adb619900896a",
+        "signature": "453abbd598aa3aeac131ddad5e17dcf7aa29c38dd3da1aaad47adb619900896a",
         "affectsGlobalScope": true
       },
       "../node_modules/chalk/index.d.ts": {
@@ -483,7 +483,7 @@
       },
       "../src/services/test/dotenv-config.ts": {
         "version": "fccf9038f50d4d3bb2dff760e5f20be9ebd983df9b9b19a187a965963e488ee0",
-        "signature": "b920c74ece3fa54c3190387befed553ae1964f452f36bd6234122849187f0dbe",
+        "signature": "832e912bb4dca27d30cec571e66bfd5744ba64f9b39d6e0bbab7a955f2350638",
         "affectsGlobalScope": false
       },
       "../src/typings/dotenv-config.d.ts": {
@@ -491,14 +491,14 @@
         "signature": "975a60435bd745abe3e4006dd575c5fbd8c8f819aafddc42ac2d98fda1f651c6",
         "affectsGlobalScope": false
       },
-      "../src/services/optionsProvider.ts": {
-        "version": "8669370f26979f9ef1f309e64bf9c090cfb9f71baaebbea3ddb3b6e54698fd95",
-        "signature": "9046198c388489d49996c258efd63671e23c55df5b509e2d479dd8af0fbedf60",
+      "../src/services/optionsprovider.ts": {
+        "version": "3d02a3f6eea5e2f5c112b654ad789e3f68b1766296783e6cabfada4237c9afec",
+        "signature": "40162879cbda28f9f1263a1eee642d813f4f29a1476747109823c14cbfe27376",
         "affectsGlobalScope": false
       },
       "../src/services/logger.ts": {
         "version": "1f2d7becc004527c0f43cb0c5b0508f31d2db94d03e9613ecf6b1971fb0812c0",
-        "signature": "14fffa5e94abde882a65d3d0b1d83c190690011d380d764e37b1635548eb4042",
+        "signature": "c2c8b2ac2fe9ace575afb4cb9dbee5a98314067e4988aa3a649ec1629a81f1ed",
         "affectsGlobalScope": false
       },
       "../src/typings/command.d.ts": {
@@ -506,34 +506,54 @@
         "signature": "18aa6910d2d5a4b109b32ec4b92b1d6a79fc65501c335b3b1c9419dff7ddf98b",
         "affectsGlobalScope": false
       },
-      "../src/services/commandHandler.ts": {
+      "../src/services/commandhandler.ts": {
         "version": "ce14eec082c1e2b6ffaf2c947b1defaaaac879ca5f9c67f6f3c302bb40c6cfe0",
-        "signature": "dada31f163a1fe2ddc3b439ba047d54af7a4c0103af0a95d9e186d6e8bd0d4b5",
+        "signature": "83eee7b157818fe645127e96684bd1e47badebd8fb4e13dfb59460cf457b10dc",
+        "affectsGlobalScope": false
+      },
+      "../src/typings/player.d.ts": {
+        "version": "26bef1ed5cec70e41667807670cd11b44914081ae70d60912419368b3dc817b2",
+        "signature": "26bef1ed5cec70e41667807670cd11b44914081ae70d60912419368b3dc817b2",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/ytdl-core/typings/index.d.ts": {
+        "version": "0d8c2d9c6682ce5ba2b5b92ea0f155c9f06af67535ca95812e2f144788737b7d",
+        "signature": "0d8c2d9c6682ce5ba2b5b92ea0f155c9f06af67535ca95812e2f144788737b7d",
+        "affectsGlobalScope": false
+      },
+      "../src/services/player.ts": {
+        "version": "a6843a7daf566745a47a6f93dcb18be18de2271dcb119397971be08126e6ddb6",
+        "signature": "59565a9d59dd0ef3b719a7601aefe238987f391ec1985460f47321b63424fe23",
         "affectsGlobalScope": false
       },
       "../src/services/client.ts": {
-        "version": "c35809302ca98078c41fe76bafd380bee3d0e5633416cc6b8134f65f78a056fb",
-        "signature": "6639be262c3e6da62e371a66900f5d7f621c67cb770bb46a7eed3f592647c957",
+        "version": "27686d095ae64879f5269df947eaf83195e32e0947afc7bef927c4985e289d04",
+        "signature": "d2559e7e5f68bb88baef02e4838f1261b70cd5fa5a1bab5371f89c1d92c542af",
         "affectsGlobalScope": false
       },
-      "../src/services/commandParser.ts": {
+      "../src/services/commandparser.ts": {
         "version": "4292aff4a06af593b4c7b78d6c3aa806ac51f54c70c51005dfb73a1e0da3e2dd",
-        "signature": "7d8a3acf3bd7c1adb8ef63ca4419bd07c89c2e82712b856d6182b6df2f4d6a19",
+        "signature": "46479131f0035f14499194e39d68a2f5f2c7531161a98b51b41330db734bca69",
         "affectsGlobalScope": false
       },
       "../src/akira.ts": {
         "version": "6014d17d0e638b4858da5313ec6482e9570cf91c04e13d9c67b63b3416696286",
-        "signature": "5c9cd8ba4f81982e8002c709ba0f6675b7aaf1def7f8a98a9996040a3e1c2bc0",
+        "signature": "0e7c6f172815224902d2b780918250d131abb33ddc0f2e042ab423db53f72370",
+        "affectsGlobalScope": false
+      },
+      "../src/commands/music/play.ts": {
+        "version": "eceac2d7be20b77137b4d15efc41add502f0cf78c8af7bb7ec90e02a1a0ee2d2",
+        "signature": "3483a5e853683dde1bf0b93c8355d0dd8358e7c89cea5236659d25f787fbf439",
         "affectsGlobalScope": false
       },
       "../src/commands/owner/evaluate.ts": {
         "version": "63f2b5afc64430d0b217194b3a1b7419cb7d8e2b141e1275d31195eeadb3cdf8",
-        "signature": "f037d227535eade621cb371827786ae467d66f580a215f1660b532f30915eef3",
+        "signature": "aa866a91b4f68c583a0a1bff7429deac0b100df09d51e33bc201cac8e1cd5b16",
         "affectsGlobalScope": false
       },
       "../src/commands/util/usage.ts": {
         "version": "fe34b18135a6219b5d710661953f9e09707b0727f1b8436c3290bd926fbbbdea",
-        "signature": "49fdefd2c7c4cb0d414136b96f202ede5477385a03237c40442e1c6c5cf4074d",
+        "signature": "b1d462076d84d32cd486e57c92800e79594b21b419465adc3d1c540732fc79db",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/color-name/index.d.ts": {
@@ -1479,6 +1499,16 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../node_modules/ytdl-core/typings/index.d.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
       "../src/akira.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/process.d.ts",
@@ -1488,8 +1518,19 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/services/client.ts",
-        "../src/services/commandParser.ts",
+        "../src/services/commandparser.ts",
         "../src/services/test/dotenv-config.ts"
+      ],
+      "../src/commands/music/play.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../src/services/client.ts",
+        "../src/typings/player.d.ts"
       ],
       "../src/commands/owner/evaluate.ts": [
         "../node_modules/@types/node/fs.d.ts",
@@ -1519,12 +1560,13 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/services/commandHandler.ts",
+        "../src/services/commandhandler.ts",
         "../src/services/logger.ts",
-        "../src/services/optionsProvider.ts",
+        "../src/services/optionsprovider.ts",
+        "../src/services/player.ts",
         "../src/typings/command.d.ts"
       ],
-      "../src/services/commandHandler.ts": [
+      "../src/services/commandhandler.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/path.d.ts",
         "../node_modules/@types/node/process.d.ts",
@@ -1535,7 +1577,7 @@
         "../src/services/client.ts",
         "../src/typings/command.d.ts"
       ],
-      "../src/services/commandParser.ts": [
+      "../src/services/commandparser.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/process.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -1555,7 +1597,7 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/chalk/index.d.ts"
       ],
-      "../src/services/optionsProvider.ts": [
+      "../src/services/optionsprovider.ts": [
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/process.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -1563,6 +1605,18 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../src/typings/dotenv-config.d.ts"
+      ],
+      "../src/services/player.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../node_modules/ytdl-core/typings/index.d.ts",
+        "../src/services/client.ts",
+        "../src/typings/player.d.ts"
       ],
       "../src/services/test/dotenv-config.ts": [
         "../node_modules/@types/node/fs.d.ts",
@@ -1588,6 +1642,15 @@
         "../node_modules/@types/node/ts3.2/process.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/typings/player.d.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -2491,6 +2554,20 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../node_modules/ytdl-core/typings/index.d.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/commands/music/play.ts": [
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../src/services/client.ts"
+      ],
       "../src/commands/owner/evaluate.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/services/client.ts"
@@ -2501,18 +2578,25 @@
       ],
       "../src/services/client.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
+        "../src/services/player.ts",
         "../src/typings/command.d.ts",
         "../src/typings/dotenv-config.d.ts"
       ],
-      "../src/services/commandHandler.ts": [
+      "../src/services/commandhandler.ts": [
         "../src/services/client.ts"
       ],
-      "../src/services/commandParser.ts": [
+      "../src/services/commandparser.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/services/client.ts"
       ],
-      "../src/services/optionsProvider.ts": [
+      "../src/services/optionsprovider.ts": [
         "../src/typings/dotenv-config.d.ts"
+      ],
+      "../src/services/player.ts": [
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../node_modules/ytdl-core/typings/index.d.ts",
+        "../src/services/client.ts",
+        "../src/typings/player.d.ts"
       ],
       "../src/typings/command.d.ts": [
         "../node_modules/@types/node/fs.d.ts",
@@ -2529,6 +2613,15 @@
         "../node_modules/@types/node/ts3.2/process.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/typings/player.d.ts": [
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/process.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/process.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2631,17 +2724,21 @@
       "../node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "../node_modules/typescript/lib/lib.esnext.promise.d.ts",
       "../node_modules/typescript/lib/lib.esnext.string.d.ts",
+      "../node_modules/ytdl-core/typings/index.d.ts",
       "../src/akira.ts",
+      "../src/commands/music/play.ts",
       "../src/commands/owner/evaluate.ts",
       "../src/commands/util/usage.ts",
       "../src/services/client.ts",
-      "../src/services/commandHandler.ts",
-      "../src/services/commandParser.ts",
+      "../src/services/commandhandler.ts",
+      "../src/services/commandparser.ts",
       "../src/services/logger.ts",
-      "../src/services/optionsProvider.ts",
+      "../src/services/optionsprovider.ts",
+      "../src/services/player.ts",
       "../src/services/test/dotenv-config.ts",
       "../src/typings/command.d.ts",
-      "../src/typings/dotenv-config.d.ts"
+      "../src/typings/dotenv-config.d.ts",
+      "../src/typings/player.d.ts"
     ]
   },
   "version": "3.9.7"

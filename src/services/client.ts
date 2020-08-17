@@ -3,6 +3,7 @@ import getConfig from './optionsProvider';
 import Logger from './logger';
 import commandTypes from '../typings/command';
 import handleCommands from './commandHandler';
+import Player from './player';
 
 export default class AkiraClient extends Client {
     constructor() {
@@ -29,6 +30,7 @@ export default class AkiraClient extends Client {
     public readonly log = new Logger().log
     public readonly config = getConfig()
     public readonly commands = new Collection<string, commandTypes>()
+    public readonly player = new Player(this)
 
     /**
      * Initialize client construction.

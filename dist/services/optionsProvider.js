@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Return config object.
- * @returns {Promise<configTypes>}
+ * @returns {configTypes}
  */
 function getConfig() {
     // Construct config object

@@ -1,24 +1,24 @@
-import { VoiceChannel, VoiceConnection } from 'discord.js';
+import { VoiceConnection } from 'eris';
 
 interface queueTypes {
     guildName: string
     guildID: string
-    voiceChannel: VoiceChannel
+    voiceChannelID: string
     connection: VoiceConnection
-    loopMode: number
-    previous: songTypes
-    //bassbost: boolean | Bassbost mode lost it support
-    volume: number
     songs: Array<songTypes>
-    playing: boolean
+    loopMode: number
+    volume: number
+    isBassBoosted: boolean
+    isPlaying: boolean
 }
 
 interface songTypes {
     title: string
     url: string
-    duration?: durationTypes
     requester: string
-    isLive: boolean
+    duration: durationTypes
+    votesToSkip?: number // Optional
+    votesToEnd?: number // Optional
 }
 
 interface durationTypes {
@@ -27,4 +27,4 @@ interface durationTypes {
     seconds: number
 }
 
-export { queueTypes, songTypes, durationTypes };
+export { queueTypes, songTypes };

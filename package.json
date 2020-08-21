@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Akira is an easy to understand, rich in features music bot that aims to get highest quality music stream on Discord.",
   "main": "dist/akira.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:fix": "npx prettier --write src && npx eslint src --ext .ts --fix",
@@ -29,20 +30,6 @@
     "url": "https://github.com/Razzels0/Akira/issues"
   },
   "homepage": "https://github.com/Razzels0/Akira#readme",
-  "dependencies": {
-    "@discordjs/opus": "^0.3.2",
-    "bufferutil": "^4.0.1",
-    "chalk": "^4.1.0",
-    "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0",
-    "erlpack": "github:discordapp/erlpack",
-    "libsodium-wrappers": "^0.7.8",
-    "simple-youtube-api": "^5.2.1",
-    "tslib": "^2.0.1",
-    "utf-8-validate": "^5.0.2",
-    "ytdl-core": "^3.2.1",
-    "zlib-sync": "^0.1.7"
-  },
   "devDependencies": {
     "@types/node": "^14.0.27",
     "@types/ws": "^7.2.6",
@@ -51,5 +38,13 @@
     "eslint": "^7.6.0",
     "prettier": "^2.0.5",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.3.2",
+    "dotenv": "^8.2.0",
+    "eris": "^0.13.3",
+    "simple-youtube-api": "^5.2.1",
+    "tslib": "^2.0.1",
+    "ytdl-core": "^3.2.1"
   }
 }

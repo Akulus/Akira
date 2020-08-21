@@ -87,10 +87,12 @@ const client: Client = new Client(
             errorMessage: '⚠️ Sorry, but I found an unknown problem while executing command. Operation cancelled.',
             guildOnly: true,
             hidden: false,
+            caseInsensitive: true,
             restartCooldown: false,
             invalidUsageMessage: '🔎 Missing arguments. Use `help <command name>` to get more info.'
         }
     }
 );
 
+client.registerEveryCommand();
 client.connect();

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Akira is an easy to understand, rich in features music bot that aims to get highest quality music stream on Discord.",
   "main": "dist/akira.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:fix": "npx prettier --write src && npx eslint src --ext .ts --fix",
@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/Razzels0/Akira#readme",
   "devDependencies": {
+    "@types/bluebird": "^3.5.32",
     "@types/node": "^14.0.27",
     "@types/ws": "^7.2.6",
     "@typescript-eslint/eslint-plugin": "^3.9.0",

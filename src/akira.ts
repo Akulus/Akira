@@ -7,7 +7,7 @@ const client: Client = new Client(
     process.env.BOT_TOKEN,
     {
         autoreconnect: true,
-        compress: true,
+        compress: false,
         connectionTimeout: 30000,
         disableEvents: {
             GUILD_UPDATE: true,
@@ -23,8 +23,6 @@ const client: Client = new Client(
             MEMBER_BAN_REMOVE: true,
             MEMBER_UPDATE: true,
             MEMBER_ROLE_UPDATE: true,
-            MEMBER_MOVE: false,
-            MEMBER_DISCONNECT: false,
             BOT_ADD: true,
             ROLE_CREATE: true,
             ROLE_UPDATE: true,
@@ -44,7 +42,16 @@ const client: Client = new Client(
             MESSAGE_UNPIN: true,
             INTEGRATION_CREATE: true,
             INTEGRATION_UPDATE: true,
-            INTEGRATION_DELETE: true
+            INTEGRATION_DELETE: true,
+            PRESENCE_UPDATE: true,
+            TYPING_START: true,
+            MESSAGE_UPDATE: true,
+            MESSAGE_DELETE_BULK: true,
+            GUILD_MEMBER_ADD: true,
+            GUILD_MEMBER_REMOVE: true,
+            GUILD_MEMBER_UPDATE: true,
+            GUILD_BAN_REMOVE: true,
+            GUILD_BAN_ADD: true
         },
         allowedMentions: {
             everyone: false,
@@ -93,6 +100,24 @@ const client: Client = new Client(
         }
     }
 );
+
+client.on('ready', () => {
+    console.log('Connected!');
+
+    let loopCount = 1;
+    let lowest = 999;
+    let highest = 0;
+    let current = 0;
+
+    setInterval(() => {
+        current = process.memoryUsage().heapUsed / 1048576;
+
+        if (current < lowest) lowest = current;
+        if (current > highest) highest = current;
+
+        console.log(`[${loopCount++}] Min: ${lowest.toFixed(1)}MB Max: ${highest.toFixed(1)}MB Current: ${current.toFixed(1)}MB`);
+    }, 10 * 1000);
+});
 
 client.registerEveryCommand();
 client.connect();

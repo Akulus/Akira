@@ -3,11 +3,11 @@ import { VoiceConnection } from 'eris';
 interface queueTypes {
     guildName: string
     guildID: string
-    voiceChannelID: string
     connection: VoiceConnection
     songs: Array<songTypes>
     loopMode: number
     volume: number
+    previous?: songTypes
     isBassBoosted: boolean
     isPlaying: boolean
 }
@@ -27,4 +27,4 @@ interface durationTypes {
     seconds: number
 }
 
-export { queueTypes, songTypes };
+export { queueTypes, songTypes, durationTypes };

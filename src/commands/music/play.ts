@@ -6,6 +6,8 @@ export function add(client: AkiraClient): void {
     client.registerCommand(
         'play',
         async (msg: Message, args: string[]) => {
+            // #TEST console.log(msg.member);
+            
             // Check if member is on voice channel
             if (!msg.member.voiceState || !msg.member.voiceState.channelID)
                 return msg.channel.createMessage('🔎 Where are you? I can\'t find right voice channel to join.');
@@ -20,7 +22,7 @@ export function add(client: AkiraClient): void {
             let serverQueue: queueTypes | undefined = client.player.getPlayer(msg.guildID);
 
             // Check if member is on correct channel
-            if (serverQueue && serverQueue.connection.channelID !== msg.member.voiceState.channelID)
+            if (serverQueue && serverQueue.voiceChannelID !== msg.member.voiceState.channelID)
                 return msg.channel.createMessage('❗ You need to be in the same voice channel as I to use this command.');
 
             // Detect if provided args are link or song title (or playlist)
@@ -52,7 +54,27 @@ export function add(client: AkiraClient): void {
                     }
                 }
                 case 0: {
-                    break; // TODO, search single song
+                    const handleTrack: songTypes | string = await client.player.searchVideo(query, msg.author.username);
+
+                    // Return with a message about an error if function .getVideo return a string
+                    if (typeof handleTrack === 'string') return msg.channel.createMessage(handleTrack);
+
+                    // Try to handle song object to the queue
+                    if (serverQueue) {
+                        serverQueue.songs.push(handleTrack);
+                        return msg.channel.createMessage(
+                            `🎵 **Queued up:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
+                        );
+                    } else {
+                        serverQueue = client.player.constructNewQueue(msg);
+                        serverQueue.songs.push(handleTrack);
+                        //serverQueue.connection = await client.joinVoiceChannel(msg.member.voiceState.channelID);
+                        //serverQueue.connection.updateVoiceState(false, true);
+                        client.player.play(serverQueue, msg.member.voiceState.channelID);
+                        return msg.channel.createMessage(
+                            `🎵 **Playing:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
+                        );
+                    }
                 }
             }
         },

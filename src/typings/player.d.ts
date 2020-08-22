@@ -1,9 +1,7 @@
-import { VoiceConnection } from 'eris';
-
 interface queueTypes {
     guildName: string
     guildID: string
-    connection: VoiceConnection
+    voiceChannelID: string
     songs: Array<songTypes>
     loopMode: number
     volume: number

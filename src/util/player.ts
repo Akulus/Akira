@@ -22,12 +22,11 @@ export default class Player {
      * @returns {Promise<void>}
      */
     async play(serverQueue: queueTypes, voiceChannelID: string): Promise<void> {
-
         await this.client.joinVoiceChannel(voiceChannelID).then(async (connection: VoiceConnection) => {
             if (!serverQueue || (serverQueue && serverQueue.songs.length === 0)) {
                 try {
                     connection.removeAllListeners();
-                    this.client.leaveVoiceChannel(serverQueue.connection.channelID);
+                    this.client.leaveVoiceChannel(serverQueue.voiceChannelID);
                 } catch (error) {
                     console.error(error);
                 }
@@ -44,7 +43,7 @@ export default class Player {
                 // loopMode: 0 = disabled, 1 = for all tracks & 2 = only for current, single song
                 if (serverQueue.loopMode === 1) serverQueue.songs.push(serverQueue.songs[0]);
                 if (serverQueue.loopMode < 2) serverQueue.songs.shift();
-    
+
                 if (!serverQueue.songs[0]) {
                     try {
                         connection.removeAllListeners();
@@ -55,7 +54,7 @@ export default class Player {
                     this.queue.delete(serverQueue.guildID);
                     return;
                 }
-    
+
                 connection.removeAllListeners();
                 serverQueue.previous = serverQueue.songs[0];
                 this.play(serverQueue, voiceChannelID);
@@ -128,6 +127,19 @@ export default class Player {
     }
 
     /**
+     * Searches for song and tries to handle it.
+     * @param {string} [query]
+     * @param {string} [member]
+     * @returns {Promise<songTypes | string>}
+     */
+    async searchVideo(query: string, member: string): Promise<songTypes | string> {
+        const video = await this.youtube.searchVideos(query, 1);
+
+        if (!video || !video[0] || !video[0].url) return '❗ I could not find any song with provided title.';
+        else return await this.getVideo(video[0].url, member);
+    }
+
+    /**
      * Splits total number of seconds into hours, minutes and seconds.
      * @param {number} [rawTime]
      * @returns {durationTypes}
@@ -165,7 +177,7 @@ export default class Player {
             this.queue.set(msg.guildID, {
                 guildName: msg.member.guild.name,
                 guildID: msg.guildID,
-                connection: null,
+                voiceChannelID: msg.member.voiceState.channelID,
                 songs: [],
                 loopMode: 0,
                 volume: this.client.config.musicSettings.defaultVolume || 75,

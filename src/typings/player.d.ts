@@ -27,4 +27,14 @@ interface durationTypes {
     seconds: number
 }
 
-export { queueTypes, songTypes, durationTypes };
+interface playlistPayload {
+    playlistData: playlistDataTypes
+    tracks: Array<songTypes>
+}
+
+interface playlistDataTypes {
+    title: string
+    duration: durationTypes
+}
+
+export { queueTypes, songTypes, durationTypes, playlistPayload };

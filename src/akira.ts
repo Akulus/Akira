@@ -101,23 +101,5 @@ const client: Client = new Client(
     }
 );
 
-client.on('ready', () => {
-    console.log('Connected!');
-
-    let loopCount = 1;
-    let lowest = 999;
-    let highest = 0;
-    let current = 0;
-
-    setInterval(() => {
-        current = process.memoryUsage().heapUsed / 1048576;
-
-        if (current < lowest) lowest = current;
-        if (current > highest) highest = current;
-
-        console.log(`[${loopCount++}] Min: ${lowest.toFixed(1)}MB Max: ${highest.toFixed(1)}MB Current: ${current.toFixed(1)}MB`);
-    }, 10 * 1000);
-});
-
 client.registerEveryCommand();
 client.connect();

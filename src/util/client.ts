@@ -6,7 +6,7 @@ import { join } from 'path';
 import configTypes from '../typings/config.js';
 
 export default class AkiraClient extends CommandClient {
-    public readonly player = new Player(this, process.env.YOUTUBE_KEY)
+    public readonly player = new Player(this)
     public readonly config: configTypes = config
     public readonly rootPath: string = __dirname || process.cwd()
 
@@ -22,10 +22,10 @@ export default class AkiraClient extends CommandClient {
                         require(join(this.rootPath, "..", "commands", dir, commandFile)).add(this) // eslint-disable-line
                         return console.log(`Succesfully loaded ${join(this.rootPath, '..', 'commands', dir, commandFile)}`);
                     } catch (error) {
-                        return console.warn(`Unable to load ${join(this.rootPath, '..', 'commands', dir, commandFile)}\n=> ${error}`);
+                        return console.warn(`Unable to load ${join(this.rootPath, '..', 'commands', dir, commandFile)}\n${error}`);
                     }
                 } else {
-                    return console.warn(`Unable to load ${join(this.rootPath, '..', 'commands', dir, commandFile)}\n=> Invalid file extension.`);
+                    return console.warn(`Unable to load ${join(this.rootPath, '..', 'commands', dir, commandFile)}\nInvalid file extension.`);
                 }
             });
         });

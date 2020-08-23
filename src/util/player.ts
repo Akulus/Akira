@@ -1,19 +1,17 @@
 import AkiraClient from './client.js';
 // @ts-ignore <== Missing @types
-import Youtube from 'simple-youtube-api';
 import { queueTypes, songTypes, durationTypes } from '../typings/player';
 import ytdl from 'ytdl-core';
-import { Message, VoiceConnection } from 'eris';
+import scrapeYt from 'scrape-yt';
+import { Message } from 'eris';
 
 export default class Player {
-    constructor(client: AkiraClient, ytKey: string) {
+    constructor(client: AkiraClient) {
         this.client = client;
-        this.youtube = new Youtube(ytKey);
         this.queue = new Map();
     }
 
     private readonly client: AkiraClient
-    private youtube: Youtube
     private readonly queue: Map<string, queueTypes>
 
     /**
@@ -104,28 +102,19 @@ export default class Player {
      * @returns {Promise<songTypes | string>}
      */
     async getVideo(url: string, member: string): Promise<songTypes | string> {
-        try {
-            const data: ytdl.videoInfo = await ytdl.getBasicInfo(url);
+        const video = await scrapeYt.getVideo(ytdl.getVideoID(url), { useWorkerThread: false });
+        if(!video || Object.keys(video).length === 0) return '❗ I could not find any song using provided url. *(content may be private or unavailable)*';
 
-            // Return if that's a live content
-            if (data.player_response.videoDetails.isLiveContent || data.videoDetails.lengthSeconds === '0')
-                return '❗ To get highest possible quality - support for live content is disabled.';
+        // Check if it's not a live content
+        // @ts-ignore
+        if(video.isLiveContent || !video.duration || video.duration === 0) return '❗ To get highest possible quality - support for live content is disabled.';
 
-            // Construct song object
-            const track: songTypes = {
-                title: data.videoDetails.title.replace(/\\(\*|_|`|~|\\)/g, '$1').replace(/(\*|_|`|~|\\)/g, '\\$1'),
-                url: `https://www.youtube.com/watch?v=${data.videoDetails.videoId}` || url,
-                requester: member,
-                duration: this.getVideoLength(Number(data.videoDetails.lengthSeconds))
-            };
-
-            return track;
-        } catch (error) {
-            if (String(error).includes('Video unavailable')) return '⚠️ Provided url is invalid or song from it is currently unavailable.';
-            else if (String(error).includes('private video')) return '🔒 Video from provided url is private.';
-            else if (String(error).includes('copyright')) return '🔒 Video from provided url is under copyrights.';
-            else return '⚠️ I run into unknown error. Contact the bot owner if this problem is common.';
-        }
+        return { // @ts-ignore - please, somebody kill me with these {}
+            title: video.title, // @ts-ignore
+            url: `https://www.youtube.com/watch?v=${video.id}` || url,
+            requester: member, // @ts-ignore
+            duration: this.getVideoLength(video.duration)
+        };
     }
 
     /**
@@ -135,11 +124,55 @@ export default class Player {
      * @returns {Promise<songTypes | string>}
      */
     async searchVideo(query: string, member: string): Promise<songTypes | string> {
-        const video = await this.youtube.searchVideos(query, 1);
+        const videos = await scrapeYt.search(query, { type: 'video', limit: 1, page: 1, useWorkerThread: false});
 
-        if (!video || !video[0] || !video[0].url) return '❗ I could not find any song with provided title.';
-        else return await this.getVideo(video[0].url, member);
+        if(!videos || videos.length === 0) return '❗ I could not find any song using provided url. *(maybe adding more details may help?)*';
+
+        // Check if it's not a live content
+        // @ts-ignore
+        if(videos[0].isLiveContent || !videos[0].duration || videos[0].duration === 0) return '❗ To get highest possible quality - support for live content is disabled.';
+
+        return { // @ts-ignore - please, somebody kill me with these partial types
+            title: videos[0].title, // @ts-ignore
+            url: `https://www.youtube.com/watch?v=${videos[0].id}` || url,
+            requester: member, // @ts-ignore
+            duration: this.getVideoLength(videos[0].duration)
+        };
     }
+
+    /**
+     * Tries to grab multiple songs from playlist.
+     * @param {string} [playlistURL]
+     * @param {string} [member]
+     * @returns {playlistPayload | string>}
+     */
+    // async getPlaylist(playlistURL: string, member: string): Promise<playlistPayload | string> {
+    //     const payload: playlistPayload = {
+    //         playlistData: {
+    //             title: undefined,
+    //             duration: {
+    //                 hours: 0,
+    //                 minutes: 0,
+    //                 seconds: 0
+    //             }
+    //         },
+    //         tracks: []
+    //     };
+
+    //     let rawVideos: Array<any> = []; // eslint-disable-line
+
+    //     try {
+    //         const playlist: any = await this.youtube.getPlaylist(playlistURL, { part: 'snippet' }); // eslint-disable-line
+    //         rawVideos = await playlist.getVideos(this.client.config.musicSettings.playlistLimit || 50, { part: 'snippet' });
+    //         payload.playlistData.title = playlist.title;
+    //     } catch (_) {
+    //         return '❗ I could not find any tacks from provided playlist url.';
+    //     }
+
+    //     rawVideos.forEach((video) => {
+    //         console.log(typeof video.durationSeconds);
+    //     });
+    // }
 
     /**
      * Splits total number of seconds into hours, minutes and seconds.

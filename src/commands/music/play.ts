@@ -23,32 +23,33 @@ export function add(client: AkiraClient): void {
             if (serverQueue && serverQueue.connection.channelID !== msg.member.voiceState.channelID)
                 return msg.channel.createMessage('❗ You need to be in the same voice channel as I to use this command.');
 
+            // Send msg to member that bot is working on music
+            const work = await msg.channel.createMessage('🔎 Searching music...');
+
             // Detect if provided args are link or song title (or playlist)
             switch (client.player.validateQuery(query)) {
                 case 2: {
-                    break; // TODO, playlists
+                    // work.edit(`💿 Downloading tracks... *(Limit: ${client.config.musicSettings.playlistLimit})*`);
+                    // const handleTracks: playlistPayload | string = await client.player.getPlaylist(query, msg.author.username);
+                    break;
                 }
                 case 1: {
                     const handleTrack: songTypes | string = await client.player.getVideo(query, msg.author.username);
 
                     // Return with a message about an error if function .getVideo return a string
-                    if (typeof handleTrack === 'string') return msg.channel.createMessage(handleTrack);
+                    if (typeof handleTrack === 'string') return work.edit(handleTrack);
 
                     // Try to handle song object to the queue
                     if (serverQueue) {
                         serverQueue.songs.push(handleTrack);
-                        return msg.channel.createMessage(
-                            `🎵 **Queued up:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
-                        );
+                        return work.edit(`🎵 **Queued up:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``);
                     } else {
                         serverQueue = client.player.constructNewQueue(msg);
                         serverQueue.songs.push(handleTrack);
                         serverQueue.connection = await client.joinVoiceChannel(msg.member.voiceState.channelID);
                         serverQueue.connection.updateVoiceState(false, true);
                         client.player.play(serverQueue);
-                        return msg.channel.createMessage(
-                            `🎵 **Playing:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
-                        );
+                        return work.edit(`🎵 **Playing:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``);
                     }
                 }
                 case 0: {
@@ -60,18 +61,14 @@ export function add(client: AkiraClient): void {
                     // Try to handle song object to the queue
                     if (serverQueue) {
                         serverQueue.songs.push(handleTrack);
-                        return msg.channel.createMessage(
-                            `🎵 **Queued up:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
-                        );
+                        return work.edit(`🎵 **Queued up:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``);
                     } else {
                         serverQueue = client.player.constructNewQueue(msg);
                         serverQueue.songs.push(handleTrack);
                         serverQueue.connection = await client.joinVoiceChannel(msg.member.voiceState.channelID);
                         serverQueue.connection.updateVoiceState(false, true);
                         client.player.play(serverQueue);
-                        return msg.channel.createMessage(
-                            `🎵 **Playing:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``
-                        );
+                        return work.edit(`🎵 **Playing:** ${handleTrack.title} \`[${client.player.getReadableTimestamp(handleTrack.duration)}]\``);
                     }
                 }
             }

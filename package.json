@@ -44,7 +44,7 @@
     "@discordjs/opus": "^0.3.2",
     "dotenv": "^8.2.0",
     "eris": "^0.13.3",
-    "simple-youtube-api": "^5.2.1",
+    "scrape-yt": "^1.4.1",
     "tslib": "^2.0.1",
     "ytdl-core": "^3.2.2"
   }

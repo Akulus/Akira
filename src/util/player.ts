@@ -21,53 +21,55 @@ export default class Player {
      * @param {queueTypes} [serverQueue]
      * @returns {Promise<void>}
      */
-    async play(serverQueue: queueTypes, voiceChannelID: string): Promise<void> {
-        await this.client.joinVoiceChannel(voiceChannelID).then(async (connection: VoiceConnection) => {
-            if (!serverQueue || (serverQueue && serverQueue.songs.length === 0)) {
-                try {
-                    connection.removeAllListeners();
-                    this.client.leaveVoiceChannel(serverQueue.voiceChannelID);
-                } catch (error) {
-                    console.error(error);
-                }
+    async play(serverQueue: queueTypes): Promise<void> {
+        if (!serverQueue || (serverQueue && serverQueue.songs.length === 0)) {
+            try {
+                serverQueue.connection.removeAllListeners();
+                this.client.leaveVoiceChannel(serverQueue.connection.channelID);
+                delete serverQueue.connection;
+                this.queue.delete(serverQueue.guildID);
+            } catch (error) {
+                console.error(error);
             }
+        }
 
-            connection.play(ytdl(serverQueue.songs[0].url, { highWaterMark: 1 << 12, filter: 'audioonly', quality: 'highestaudio' }), {
-                voiceDataTimeout: 4000,
-                inlineVolume: false
-            });
+        serverQueue.connection.setVolume(Number(serverQueue.volume) / 100);
 
-            connection.setVolume(Number(serverQueue.volume) / 100);
+        serverQueue.connection.play(ytdl(serverQueue.songs[0].url, { highWaterMark: 1 << 12, filter: 'audioonly', quality: 'highestaudio' }), {
+            voiceDataTimeout: 4000,
+            inlineVolume: false
+        });
 
-            connection.on('end', () => {
-                // loopMode: 0 = disabled, 1 = for all tracks & 2 = only for current, single song
-                if (serverQueue.loopMode === 1) serverQueue.songs.push(serverQueue.songs[0]);
-                if (serverQueue.loopMode < 2) serverQueue.songs.shift();
+        serverQueue.connection.on('end', () => {
+            // loopMode: 0 = disabled, 1 = for all tracks & 2 = only for current, single song
+            if (serverQueue.loopMode === 1) serverQueue.songs.push(serverQueue.songs[0]);
+            if (serverQueue.loopMode < 2) serverQueue.songs.shift();
 
-                if (!serverQueue.songs[0]) {
-                    try {
-                        connection.removeAllListeners();
-                        this.client.leaveVoiceChannel(voiceChannelID);
-                    } catch (err) {
-                        console.error(`${serverQueue.guildName} => Run into an unknown problem with player.\n${err}`);
-                    }
-                    this.queue.delete(serverQueue.guildID);
-                    return;
-                }
-
-                connection.removeAllListeners();
-                serverQueue.previous = serverQueue.songs[0];
-                this.play(serverQueue, voiceChannelID);
-            });
-
-            connection.on('disconnect', () => {
+            if (!serverQueue.songs[0]) {
                 try {
-                    connection.removeAllListeners();
-                } catch (error) {
-                    console.error(error);
+                    serverQueue.connection.removeAllListeners();
+                    this.client.leaveVoiceChannel(serverQueue.connection.channelID);
+                    delete serverQueue.connection;
+                } catch (err) {
+                    console.error(`${serverQueue.guildName} => Run into an unknown problem with player.\n${err}`);
                 }
                 this.queue.delete(serverQueue.guildID);
-            });
+                return;
+            }
+
+            serverQueue.connection.removeAllListeners();
+            serverQueue.previous = serverQueue.songs[0];
+            this.play(serverQueue);
+        });
+
+        serverQueue.connection.on('disconnect', () => {
+            try {
+                serverQueue.connection.removeAllListeners();
+                delete serverQueue.connection;
+            } catch (error) {
+                console.error(error);
+            }
+            this.queue.delete(serverQueue.guildID);
         });
     }
 
@@ -177,7 +179,7 @@ export default class Player {
             this.queue.set(msg.guildID, {
                 guildName: msg.member.guild.name,
                 guildID: msg.guildID,
-                voiceChannelID: msg.member.voiceState.channelID,
+                connection: null,
                 songs: [],
                 loopMode: 0,
                 volume: this.client.config.musicSettings.defaultVolume || 75,

@@ -1,6 +1,6 @@
 import { Message } from 'eris';
 import AkiraClient from '../../util/client.js';
-import { queueTypes, songTypes } from '../../typings/player.js';
+import { queueTypes, songTypes, playlistPayload } from '../../typings/player.js';
 
 export function add(client: AkiraClient): void {
     client.registerCommand(
@@ -29,9 +29,35 @@ export function add(client: AkiraClient): void {
             // Detect if provided args are link or song title (or playlist)
             switch (client.player.validateQuery(query)) {
                 case 2: {
-                    // work.edit(`💿 Downloading tracks... *(Limit: ${client.config.musicSettings.playlistLimit})*`);
-                    // const handleTracks: playlistPayload | string = await client.player.getPlaylist(query, msg.author.username);
-                    break;
+                    work.edit('💿 Downloading tracks... *(Up to 100)*');
+                    const handleTracks: playlistPayload | string = await client.player.getPlaylist(query, msg.author.username);
+
+                    // Return with a message about an error if function .getVideo return a string
+                    if (typeof handleTracks === 'string') return work.edit(handleTracks);
+
+                    // Try to handle all track objects to the queue
+                    if (serverQueue) {
+                        handleTracks.tracks.forEach((song) => serverQueue.songs.push(song));
+                        return work.edit(
+                            `📀 **Enqueued** \`${handleTracks.tracks.length}\` songs from **${
+                                handleTracks.playlistData.title
+                            }**. \`[${client.player.getReadableTimestamp(handleTracks.playlistData.duration)}]\``
+                        );
+                    } else {
+                        serverQueue = client.player.constructNewQueue(msg);
+                        serverQueue.songs = handleTracks.tracks;
+                        serverQueue.connection = await client.joinVoiceChannel(msg.member.voiceState.channelID);
+                        serverQueue.connection.updateVoiceState(false, true);
+                        client.player.play(serverQueue);
+                        work.edit(
+                            `📀 **Enqueued** \`${handleTracks.tracks.length}\` songs from **${
+                                handleTracks.playlistData.title
+                            }**. \`[${client.player.getReadableTimestamp(handleTracks.playlistData.duration)}]\``
+                        );
+                        return msg.channel.createMessage(
+                            `🎵 **Playing:** ${serverQueue.songs[0].title} \`[${client.player.getReadableTimestamp(serverQueue.songs[0].duration)}]\``
+                        );
+                    }
                 }
                 case 1: {
                     const handleTrack: songTypes | string = await client.player.getVideo(query, msg.author.username);

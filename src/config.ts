@@ -8,7 +8,6 @@ export default {
     prefix: ['a!', '@mention'],
     musicSettings: {
         defaultVolume: 75,
-        playlistLimit: 200,
         djRoleName: 'DJ',
         enablePresets: true
     }

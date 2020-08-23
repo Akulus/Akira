@@ -13,7 +13,6 @@ interface botInfoTypes {
 
 interface musicSettingsTypes {
     defaultVolume: number
-    playlistLimit: number
     djRoleName: string
     enablePresets: boolean
 }

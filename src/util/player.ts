@@ -1,6 +1,6 @@
 import AkiraClient from './client.js';
 // @ts-ignore <== Missing @types
-import { queueTypes, songTypes, durationTypes } from '../typings/player';
+import { queueTypes, songTypes, durationTypes, playlistPayload } from '../typings/player';
 import ytdl from 'ytdl-core';
 import scrapeYt from 'scrape-yt';
 import { Message } from 'eris';
@@ -103,13 +103,14 @@ export default class Player {
      */
     async getVideo(url: string, member: string): Promise<songTypes | string> {
         const video = await scrapeYt.getVideo(ytdl.getVideoID(url), { useWorkerThread: false });
-        if(!video || Object.keys(video).length === 0) return '❗ I could not find any song using provided url. *(content may be private or unavailable)*';
+        if (!video || Object.keys(video).length === 0) return '❗ I could not find any song using provided url. *(content may be private or unavailable)*';
 
         // Check if it's not a live content
         // @ts-ignore
-        if(video.isLiveContent || !video.duration || video.duration === 0) return '❗ To get highest possible quality - support for live content is disabled.';
+        if (video.isLiveContent || !video.duration || video.duration === 0) return '❗ To get highest possible quality - support for live content is disabled.';
 
-        return { // @ts-ignore - please, somebody kill me with these {}
+        return {
+            // @ts-ignore - please, somebody kill me with these {}
             title: video.title, // @ts-ignore
             url: `https://www.youtube.com/watch?v=${video.id}` || url,
             requester: member, // @ts-ignore
@@ -124,15 +125,17 @@ export default class Player {
      * @returns {Promise<songTypes | string>}
      */
     async searchVideo(query: string, member: string): Promise<songTypes | string> {
-        const videos = await scrapeYt.search(query, { type: 'video', limit: 1, page: 1, useWorkerThread: false});
+        const videos = await scrapeYt.search(query, { type: 'video', limit: 1, page: 1, useWorkerThread: false });
 
-        if(!videos || videos.length === 0) return '❗ I could not find any song using provided url. *(maybe adding more details may help?)*';
+        if (!videos || videos.length === 0) return '❗ I could not find any song using provided url. *(maybe adding more details may help?)*';
 
         // Check if it's not a live content
         // @ts-ignore
-        if(videos[0].isLiveContent || !videos[0].duration || videos[0].duration === 0) return '❗ To get highest possible quality - support for live content is disabled.';
+        if (videos[0].isLiveContent || !videos[0].duration || videos[0].duration === 0)
+            return '❗ To get highest possible quality - support for live content is disabled.';
 
-        return { // @ts-ignore - please, somebody kill me with these partial types
+        return {
+            // @ts-ignore - please, somebody kill me with these partial types
             title: videos[0].title, // @ts-ignore
             url: `https://www.youtube.com/watch?v=${videos[0].id}` || url,
             requester: member, // @ts-ignore
@@ -146,33 +149,77 @@ export default class Player {
      * @param {string} [member]
      * @returns {playlistPayload | string>}
      */
-    // async getPlaylist(playlistURL: string, member: string): Promise<playlistPayload | string> {
-    //     const payload: playlistPayload = {
-    //         playlistData: {
-    //             title: undefined,
-    //             duration: {
-    //                 hours: 0,
-    //                 minutes: 0,
-    //                 seconds: 0
-    //             }
-    //         },
-    //         tracks: []
-    //     };
+    async getPlaylist(playlistURL: string, member: string): Promise<playlistPayload | string> {
+        const playlist = await scrapeYt.getPlaylist(this.getPlaylistID(playlistURL), { useWorkerThread: false });
+        if (!playlist || Object.keys(playlist).length === 0)
+            return '❗ I could not find any playlist from provided url.\n*(content may be unavailable or url link is invalid)*';
 
-    //     let rawVideos: Array<any> = []; // eslint-disable-line
+        const payload: playlistPayload = {
+            playlistData: {
+                // @ts-ignore - please, somebody kill me with these {}
+                title: playlist.title,
+                duration: {
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0
+                }
+            },
+            tracks: []
+        };
 
-    //     try {
-    //         const playlist: any = await this.youtube.getPlaylist(playlistURL, { part: 'snippet' }); // eslint-disable-line
-    //         rawVideos = await playlist.getVideos(this.client.config.musicSettings.playlistLimit || 50, { part: 'snippet' });
-    //         payload.playlistData.title = playlist.title;
-    //     } catch (_) {
-    //         return '❗ I could not find any tacks from provided playlist url.';
-    //     }
+        // @ts-ignore
+        playlist.videos.forEach((video) => {
+            if (video.isLiveContent || !video.duration || video.duration === 0) return;
 
-    //     rawVideos.forEach((video) => {
-    //         console.log(typeof video.durationSeconds);
-    //     });
-    // }
+            // Add video time to the total playlist time
+            payload.playlistData.duration = this.addDurationProperties(payload.playlistData.duration, this.getVideoLength(video.duration));
+
+            // Push track to array
+            payload.tracks.push({
+                title: video.title,
+                url: `https://www.youtube.com/watch?v=${video.id}`,
+                requester: member,
+                duration: this.getVideoLength(video.duration)
+            });
+        });
+
+        return payload;
+    }
+
+    /**
+     * Extracts playlist ID from full url.
+     * @param {string} [playlistURL]
+     * @returns {string}
+     */
+    getPlaylistID(playlistURL: string): string {
+        const results: RegExpMatchArray = playlistURL.match(/[?&]list=([^#\&\?]+)/) // eslint-disable-line
+        if (results[1]) return results[1];
+        else return 'Error';
+    }
+
+    /**
+     * Add time from 1 duration object to another.
+     * @param {durationTypes} [main]
+     * @param {durationTypes} [second]
+     * @returns {durationTypes}
+     */
+    addDurationProperties(main: durationTypes, second: durationTypes): durationTypes {
+        main.hours += second.hours;
+        main.minutes += second.minutes;
+        main.seconds += second.seconds;
+
+        if (main.seconds >= 60) {
+            main.seconds = main.seconds - 60;
+            main.minutes = main.minutes + 1;
+        }
+
+        if (main.minutes >= 60) {
+            main.minutes = main.minutes - 60;
+            main.hours = main.hours + 1;
+        }
+
+        return main;
+    }
 
     /**
      * Splits total number of seconds into hours, minutes and seconds.

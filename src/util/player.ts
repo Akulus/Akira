@@ -227,10 +227,10 @@ export default class Player {
      * @returns {boolean}
      */
     canBypassVoting(msg: Message): boolean {
-        const djRole: Role | undefined = msg.member.guild.roles.find(role => role.name === this.client.config.musicSettings.djRoleName);
-        if(djRole && msg.member.roles.includes(djRole.id)) return true;
-        else if(this.client.config.administrators.includes(msg.author.id)) return true;
-        else if(msg.member.permission.has('administrator') || msg.member.permission.has('manageGuild')) return true;
+        const djRole: Role | undefined = msg.member.guild.roles.find((role) => role.name === this.client.config.musicSettings.djRoleName);
+        if (djRole && msg.member.roles.includes(djRole.id)) return true;
+        else if (this.client.config.administrators.includes(msg.author.id)) return true;
+        else if (msg.member.permission.has('administrator') || msg.member.permission.has('manageGuild')) return true;
         else return false;
     }
 
@@ -292,7 +292,7 @@ export default class Player {
      */
     getVotingProgressBar(min: number, max: number): string {
         max = max - min;
-        if(max < 0) max = 0;
+        if (max < 0) max = 0;
         return '◆'.repeat(min) + '◇'.repeat(max);
     }
 }

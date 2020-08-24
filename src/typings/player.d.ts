@@ -17,8 +17,8 @@ interface songTypes {
     url: string
     requester: string
     duration: durationTypes
-    votesToSkip?: number // Optional
-    votesToEnd?: number // Optional
+    votesToSkip?: string[] // Optional
+    votesToEnd?: string[] // Optional
 }
 
 interface durationTypes {

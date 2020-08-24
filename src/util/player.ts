@@ -3,7 +3,7 @@ import AkiraClient from './client.js';
 import { queueTypes, songTypes, durationTypes, playlistPayload } from '../typings/player';
 import ytdl from 'ytdl-core';
 import scrapeYt from 'scrape-yt';
-import { Message } from 'eris';
+import { Message, Role } from 'eris';
 
 export default class Player {
     constructor(client: AkiraClient) {
@@ -222,6 +222,19 @@ export default class Player {
     }
 
     /**
+     * Returns true if member have a DJ role or is an admin/owner.
+     * @param {Message} [msg]
+     * @returns {boolean}
+     */
+    canBypassVoting(msg: Message): boolean {
+        const djRole: Role | undefined = msg.member.guild.roles.find(role => role.name === this.client.config.musicSettings.djRoleName);
+        if(djRole && msg.member.roles.includes(djRole.id)) return true;
+        else if(this.client.config.administrators.includes(msg.author.id)) return true;
+        else if(msg.member.permission.has('administrator') || msg.member.permission.has('manageGuild')) return true;
+        else return false;
+    }
+
+    /**
      * Splits total number of seconds into hours, minutes and seconds.
      * @param {number} [rawTime]
      * @returns {durationTypes}
@@ -269,5 +282,17 @@ export default class Player {
 
             return this.queue.get(msg.guildID);
         }
+    }
+
+    /**
+     * Generates & returns graphical progress bar.
+     * @param {number} [min]
+     * @param {number} [max]
+     * @returns {string}
+     */
+    getVotingProgressBar(min: number, max: number): string {
+        max = max - min;
+        if(max < 0) max = 0;
+        return '◆'.repeat(min) + '◇'.repeat(max);
     }
 }

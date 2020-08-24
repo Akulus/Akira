@@ -8,7 +8,8 @@ export function add(client: AkiraClient): void {
         (msg: Message) => {
             // Check if player plays anything
             const serverQueue: queueTypes | undefined = client.player.getPlayer(msg.guildID);
-            if (!serverQueue || !serverQueue.connection) return msg.channel.createMessage('❗ There is nothing playing that I could skip for you.');
+            if (!serverQueue || !serverQueue.connection)
+                return msg.channel.createMessage('❗ There is nothing playing right now so I can\'t process that command.');
             else if (serverQueue && serverQueue.connection.channelID !== msg.member.voiceState.channelID)
                 return msg.channel.createMessage('❗ You need to be in the same voice channel as I to use this command.');
 
@@ -30,7 +31,7 @@ export function add(client: AkiraClient): void {
             } else {
                 // @ts-ignore
                 const voiceChannel: VoiceChannel = msg.member.guild.channels.get(serverQueue.connection.channelID);
-                const required: number = Math.ceil(voiceChannel.voiceMembers.size / 2); // -1 because, we do not want to count bot
+                const required: number = Math.ceil(voiceChannel.voiceMembers.size / 2);
 
                 if (!serverQueue.songs[0].votesToSkip) serverQueue.songs[0].votesToSkip = [];
 

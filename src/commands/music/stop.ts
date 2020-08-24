@@ -8,7 +8,8 @@ export function add(client: AkiraClient): void {
         (msg: Message) => {
             // Check if player plays anything & if member is on correct channel
             const serverQueue: queueTypes | undefined = client.player.getPlayer(msg.guildID);
-            if (!serverQueue || !serverQueue.connection) return msg.channel.createMessage('❗ There is nothing playing that I could skip for you.');
+            if (!serverQueue || !serverQueue.connection)
+                return msg.channel.createMessage('❗ There is nothing playing right now so I can\'t process that command.');
             else if (serverQueue && serverQueue.connection.channelID !== msg.member.voiceState.channelID)
                 return msg.channel.createMessage('❗ You need to be in the same voice channel as I to use this command.');
 

@@ -4,8 +4,8 @@ import { queueTypes } from '../../typings/player.js';
 
 export function add(client: AkiraClient): void {
     client.registerCommand(
-        'bassboost',
-        (msg: Message) => {
+        'loop',
+        (msg: Message, args: string[]) => {
             // Check if player plays anything & if member is on correct channel
             const serverQueue: queueTypes | undefined = client.player.getPlayer(msg.guildID);
             if (!serverQueue || !serverQueue.connection)
@@ -20,19 +20,24 @@ export function add(client: AkiraClient): void {
                 );
             }
 
-            if (serverQueue.isBassBoosted) {
-                serverQueue.isBassBoosted = false;
-                return msg.channel.createMessage('🎵 **Disabled** bass boost mode. *(changes will be applied from new song)*');
+            if (serverQueue.loopMode === 0) {
+                if (!args[0] || (args[0] && ['song', 'track', 'current', 'playing', 'currently'].includes(args[0].toLowerCase()))) {
+                    serverQueue.loopMode = 2;
+                    return msg.channel.createMessage(`🎵 Enabled **loop** mode. \`${serverQueue.songs[0].title}\` will be played over and over.`);
+                } else if (args[0] && ['queue', 'all'].includes(args[0].toLowerCase())) {
+                    serverQueue.loopMode = 1;
+                    return msg.channel.createMessage(`🎵 Enabled **loop** mode. \`${serverQueue.songs.length}\` tracks will be played infinitely.`);
+                }
             } else {
-                serverQueue.isBassBoosted = true;
-                return msg.channel.createMessage('🎵 **Enabled** bass boost mode. *(changes will be applied from new song)*');
+                serverQueue.loopMode = 0;
+                return msg.channel.createMessage('🎵 Loop chain has been broken. Queue backs to normal.');
             }
         },
         {
-            aliases: ['bb', 'bass'],
+            aliases: ['infinite', 'infinity'],
             argsRequired: false,
-            description: 'Modifies equalizer to get stronger bass.',
-            fullDescription: 'Modifies main music stream by increasing bass strength.'
+            description: 'Plays selected fragment infinitely.',
+            fullDescription: 'Allows you to play current song in loop. You can add `all` parameter to give that effect over whole queue.'
         }
     );
 }

@@ -15,6 +15,7 @@ interface musicSettingsTypes {
     defaultVolume: number
     djRoleName: string
     enablePresets: boolean
+    timeAfterBotShouldLeave: number
 }
 
 export default configTypes;

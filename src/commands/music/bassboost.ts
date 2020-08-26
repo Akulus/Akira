@@ -22,10 +22,10 @@ export function add(client: AkiraClient): void {
 
             if (serverQueue.isBassBoosted) {
                 serverQueue.isBassBoosted = false;
-                return msg.channel.createMessage('🎵 **Disabled** bass boost mode. *(changes will be applied from new song)*');
+                return msg.channel.createMessage('🎵 Disabled **bass boost** mode. *(changes will be applied from new song)*');
             } else {
                 serverQueue.isBassBoosted = true;
-                return msg.channel.createMessage('🎵 **Enabled** bass boost mode. *(changes will be applied from new song)*');
+                return msg.channel.createMessage('🎵 Enabled **bass boost** mode. *(changes will be applied from new song)*');
             }
         },
         {

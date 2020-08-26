@@ -4,8 +4,8 @@ import { queueTypes } from '../../typings/player.js';
 
 export function add(client: AkiraClient): void {
     client.registerCommand(
-        'loop',
-        (msg: Message, args: string[]) => {
+        'pause',
+        (msg: Message) => {
             // Check if player plays anything & if member is on correct channel
             const serverQueue: queueTypes | undefined = client.player.getPlayer(msg.guildID);
             if (!serverQueue || !serverQueue.connection)
@@ -20,25 +20,24 @@ export function add(client: AkiraClient): void {
                 );
             }
 
-            if (serverQueue.loopMode === 0) {
-                if (!args[0] || (args[0] && ['song', 'track', 'current', 'playing', 'currently', 'single'].includes(args[0].toLowerCase()))) {
-                    serverQueue.loopMode = 2;
-                    return msg.channel.createMessage(`🎵 Enabled **loop** mode. \`${serverQueue.songs[0].title}\` will be played over and over.`);
-                } else if (args[0] && ['queue', 'all', 'multiple'].includes(args[0].toLowerCase())) {
-                    serverQueue.loopMode = 1;
-                    return msg.channel.createMessage(`🎵 Enabled **loop** mode. \`${serverQueue.songs.length}\` tracks will be played infinitely.`);
-                }
+            if (serverQueue.isPlaying) {
+                serverQueue.isPlaying = false;
+                serverQueue.connection.pause();
+                serverQueue.connection.updateVoiceState(true, true);
+                serverQueue.waitTimer = setTimeout(
+                    () => client.player.deconstructPlayer(serverQueue),
+                    client.config.musicSettings.timeAfterBotShouldLeave * 1000
+                );
+                return msg.channel.createMessage('🎵 **Paused** music player. Use `resume` command to back music.');
             } else {
-                serverQueue.loopMode = 0;
-                return msg.channel.createMessage('🎵 Loop chain has been broken. Queue backs to normal.');
+                return msg.channel.createMessage('❗ Music player is already **paused**. Use `resume` command to back music.');
             }
         },
         {
-            aliases: ['infinite', 'infinity'],
+            aliases: ['wait', 'await'],
             argsRequired: false,
-            description: 'Plays selected fragment infinitely.',
-            fullDescription: 'Allows you to play current song in loop. You can add `all` parameter to give that effect over whole queue.',
-            usage: '[single|all]'
+            description: 'Pauses music.',
+            fullDescription: 'Pauses music. Bot will wait set amount of time, and then leave from channel if you will not resume music.'
         }
     );
 }

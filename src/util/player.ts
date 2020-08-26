@@ -1,5 +1,4 @@
 import AkiraClient from './client.js';
-// @ts-ignore <== Missing @types
 import { queueTypes, songTypes, durationTypes, playlistPayload } from '../typings/player';
 import ytdl from 'ytdl-core';
 import scrapeYt from 'scrape-yt';
@@ -12,7 +11,7 @@ export default class Player {
     }
 
     private readonly client: AkiraClient
-    private readonly queue: Map<string, queueTypes>
+    public readonly queue: Map<string, queueTypes>
 
     /**
      * Main function that controls music dispatcher.
@@ -20,16 +19,7 @@ export default class Player {
      * @returns {Promise<void>}
      */
     async play(serverQueue: queueTypes): Promise<void> {
-        if (!serverQueue || (serverQueue && serverQueue.songs.length === 0)) {
-            try {
-                serverQueue.connection.removeAllListeners();
-                this.client.leaveVoiceChannel(serverQueue.connection.channelID);
-                delete serverQueue.connection;
-                this.queue.delete(serverQueue.guildID);
-            } catch (error) {
-                console.error(error);
-            }
-        }
+        if (!serverQueue || (serverQueue && serverQueue.songs.length === 0)) return this.deconstructPlayer(serverQueue);
 
         serverQueue.connection.setVolume(Number(serverQueue.volume) / 100);
 
@@ -44,17 +34,7 @@ export default class Player {
             if (serverQueue.loopMode === 1) serverQueue.songs.push(serverQueue.songs[0]);
             if (serverQueue.loopMode < 2) serverQueue.songs.shift();
 
-            if (!serverQueue.songs[0]) {
-                try {
-                    serverQueue.connection.removeAllListeners();
-                    this.client.leaveVoiceChannel(serverQueue.connection.channelID);
-                    delete serverQueue.connection;
-                } catch (err) {
-                    console.error(`${serverQueue.guildName} => Run into an unknown problem with player.\n${err}`);
-                }
-                this.queue.delete(serverQueue.guildID);
-                return;
-            }
+            if (!serverQueue.songs[0]) return this.deconstructPlayer(serverQueue);
 
             serverQueue.connection.removeAllListeners();
             serverQueue.previous = serverQueue.songs[0];
@@ -62,13 +42,7 @@ export default class Player {
         });
 
         serverQueue.connection.on('disconnect', () => {
-            try {
-                serverQueue.connection.removeAllListeners();
-                delete serverQueue.connection;
-            } catch (error) {
-                console.error(error);
-            }
-            this.queue.delete(serverQueue.guildID);
+            return this.deconstructPlayer(serverQueue);
         });
     }
 
@@ -283,6 +257,23 @@ export default class Player {
 
             return this.queue.get(msg.guildID);
         }
+    }
+
+    /**
+     * Safely deletes all data about current music player.
+     * @param {queueTypes} [serverQueue]
+     * @returns {void}
+     */
+    deconstructPlayer(serverQueue: queueTypes): void {
+        if (!serverQueue) return;
+
+        if (serverQueue.connection) {
+            serverQueue.connection.removeAllListeners();
+            this.client.leaveVoiceChannel(serverQueue.connection.channelID);
+            delete serverQueue.connection;
+        }
+        this.queue.delete(serverQueue.guildID);
+        return;
     }
 
     /**

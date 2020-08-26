@@ -10,6 +10,7 @@ interface queueTypes {
     previous?: songTypes
     isBassBoosted: boolean
     isPlaying: boolean
+    waitTimer?: unknown // Optional
 }
 
 interface songTypes {

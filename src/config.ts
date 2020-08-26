@@ -9,6 +9,7 @@ export default {
     musicSettings: {
         defaultVolume: 75,
         djRoleName: 'DJ',
-        enablePresets: true
+        enablePresets: true,
+        timeAfterBotShouldLeave: 500 // Counted in seconds
     }
 };

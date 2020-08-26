@@ -11,7 +11,7 @@ export default class Player {
     }
 
     private readonly client: AkiraClient
-    public readonly queue: Map<string, queueTypes>
+    private readonly queue: Map<string, queueTypes>
 
     /**
      * Main function that controls music dispatcher.

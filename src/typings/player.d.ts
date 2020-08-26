@@ -10,7 +10,7 @@ interface queueTypes {
     previous?: songTypes
     isBassBoosted: boolean
     isPlaying: boolean
-    waitTimer?: unknown // Optional
+    waitTimer?: any // eslint-disable-line
 }
 
 interface songTypes {

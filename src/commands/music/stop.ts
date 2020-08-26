@@ -49,7 +49,7 @@ export function add(client: AkiraClient): void {
             }
         },
         {
-            aliases: ['dc', 'end', 'disconnect', 'leave'],
+            aliases: ['dc', 'end', 'disconnect', 'leave', 'exit'],
             argsRequired: false,
             description: 'Stops the music player.',
             fullDescription: 'Stops the music player & makes bot leave from the voice channel. Members with DJ role can bypass voting system.'

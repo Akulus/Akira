@@ -63,7 +63,8 @@ export function add(client: AkiraClient): void {
             aliases: ['q', 'playing'],
             argsRequired: false,
             description: 'Displays list with tracks in queue.',
-            fullDescription: 'Displays list with tracks in queue. Provide a number as argument to see different page.'
+            fullDescription: 'Displays list with tracks in queue. Provide a number as argument to see different page.',
+            usage: '[page number]'
         }
     );
 }

@@ -25,7 +25,7 @@ export default class Player {
 
         serverQueue.connection.play(ytdl(serverQueue.songs[0].url, { highWaterMark: 1 << 12, filter: 'audioonly', quality: 'highestaudio' }), {
             voiceDataTimeout: 4000,
-            inlineVolume: false,
+            inlineVolume: true,
             encoderArgs: serverQueue.isBassBoosted ? ['-af', 'equalizer=f=100:width_type=o:width=2:g=5,equalizer=f=12000:width_type=h:width=2000:g=-20'] : []
         });
 

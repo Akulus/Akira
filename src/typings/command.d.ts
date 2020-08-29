@@ -1,10 +1,13 @@
+import { BitFieldResolvable, PermissionString } from 'discord.js';
+
 interface commandTypes {
     name: string
     description: string
     syntax?: string
     examples?: string[]
     aliases?: string[]
-    reqPerms?: string[]
+    reqOwner?: boolean
+    reqPerms?: BitFieldResolvable<PermissionString>
     execute: Function //eslint-disable-line
 }
 

@@ -1,6 +1,9 @@
 import { Client } from 'discord.js';
 import RadioManager from './radioManager';
 import CommandManager from './commandManager';
+import AsyncNedb from 'nedb-async';
+import { join } from 'path';
+import guildDataTypes from '../typings/database';
 
 export default class AkiraClient extends Client {
     constructor() {
@@ -14,7 +17,7 @@ export default class AkiraClient extends Client {
             disableMentions: 'all',
             ws: {
                 large_threshold: 50,
-                intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'GUILD_EMOJIS']
+                intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES']
             }
         });
 
@@ -23,6 +26,7 @@ export default class AkiraClient extends Client {
 
     public readonly radioManager = new RadioManager(this)
     public readonly commandManager = new CommandManager(this)
+    public readonly db = new AsyncNedb<guildDataTypes>({ filename: join(__dirname, '..', '..', 'guildData.db'), inMemoryOnly: false })
 
     /**
      * Initializes all required operations to launch bot shard.
@@ -34,6 +38,18 @@ export default class AkiraClient extends Client {
 
         console.log('[Initialization] Launching bot instance... Loading commands...');
         this.commandManager.registerCommands();
+
+        console.log('[Initialization] Loading database...');
+        this.db
+            .asyncLoadDatabase()
+            .then(() => {
+                console.log('[Database] Successfully loaded.');
+                this.db.persistence.setAutocompactionInterval(300000);
+            })
+            .catch((error) => {
+                return new TypeError(error);
+            });
+
         console.log('[Initialization] Finished! Logging into discord gateway...');
         this.login(token)
             .then(() =>
@@ -44,5 +60,18 @@ export default class AkiraClient extends Client {
             .catch(() => {
                 return new TypeError('Used bot token is invalid or discord servers are currently down.');
             });
+    }
+
+    /**
+     * Simple function to check if object is empty or not.
+     * @param {Object} [obj] //eslint-disable-line
+     * @returns {boolean}
+     */
+    //eslint-disable-next-line
+    isEmpty(obj: Object): boolean {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) return false //eslint-disable-line
+        }
+        return true;
     }
 }

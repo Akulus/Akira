@@ -56,7 +56,7 @@ export default class CommandManager {
             return;
         }
 
-        return command.execute(msg, guildData, args);
+        return command.execute(this.client, msg, args);
     }
 
     /**
@@ -70,8 +70,7 @@ export default class CommandManager {
             guildData = {
                 guildID: msg.guild.id,
                 prefix: 'a!',
-                isEnabled: false,
-                isPremium: false
+                isEnabled: false
             };
 
             await this.client.db.asyncInsert(guildData);

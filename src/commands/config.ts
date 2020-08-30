@@ -37,9 +37,15 @@ export = {
             return msg.channel.send(`📋 Successfully binded bot to \`${voiceChannel.name}\` channel.\nUse \`reconnect\` command to reset bot session.`);
         } else if (['radio', 'station', 'transmition', 'connection'].includes(args[0].toLowerCase())) {
             if (['enable', 'on', 'start'].includes(args[1].toLowerCase())) {
-                // Enable back radio somehow
+                await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { isEnabled: true } }, { multi: false });
+                return msg.channel.send('📋 Successfully **enabled**. Bot will automatically join to the channel if detect movement.');
             } else if (['disable', 'off', 'stop'].includes(args[1].toLowerCase())) {
-                if (msg.guild.me.voice.channelID) msg.guild.me.voice.channel.leave(); // Need to be improved
+                if (msg.guild.me.voice.channelID) {
+                    console.log(`[Radio Manager] Connection from guild ${msg.guild.name} has been closed at user request.`);
+                    msg.guild.me.voice.connection.removeAllListeners();
+                    msg.guild.me.voice.channel.leave();
+                }
+
                 await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { isEnabled: false } }, { multi: false });
                 return msg.channel.send('📋 Successfully **disabled**. Bot will no longer automatically try to connect & restream music from radio station.');
             } else {

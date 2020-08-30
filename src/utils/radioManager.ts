@@ -3,15 +3,18 @@ import { VoiceState, VoiceChannel, VoiceBroadcast, BroadcastDispatcher } from 'd
 import guildDataTypes from '../typings/database';
 import songs from '../songs.json';
 import ytdl from 'ytdl-core';
+import trackTypes from '../typings/track';
 
 export default class RadioManager {
     constructor(client: AkiraClient, broadcast: VoiceBroadcast) {
         this.client = client;
         this.station = broadcast;
+        this.trackID = Math.floor(Math.random() * songs.length);
     }
 
     private readonly client: AkiraClient
     private readonly station: VoiceBroadcast
+    private trackID: number
 
     /**
      * Detects when bot should join/leave.
@@ -25,11 +28,11 @@ export default class RadioManager {
 
         // Check if member just joined to a server - if yes, check if it's first - if yes, spawn connection
         if (newState.channelID && newState.channelID === guildData.voiceChannelID && newState.channel.members.size === 1) {
-            if (newState.channel.joinable && newState.channel.speakable && !newState.channel.full) {
+            if (newState.channel.joinable && newState.channel.speakable && !newState.channel.full && guildData.isEnabled) {
                 await newState.channel.join().then((connection) => {
                     connection.voice.setSelfDeaf(true);
                     connection.play(this.station).on('error', (err) => {
-                        console.log(`[Radio Manager] Guild: ${newState.guild.name} run into a problem with connection.\n${err}`);
+                        console.log(`[Radio Manager] Guild ${newState.guild.name} run into a problem with connection.\n${err}`);
                         connection.removeAllListeners();
                         newState.channel.leave();
                     });
@@ -44,15 +47,15 @@ export default class RadioManager {
         else if (newState.channelID && newState.channelID === guildData.voiceChannelID) botVoiceChannel = newState.channel;
         else return;
 
-        if (botVoiceChannel.members.size <= 1 && oldState.guild.me.voice.channelID) {
-            console.log(`[Radio Manager] Connection from guild: ${newState.guild.name} has been closed due to inactivity.`);
-            oldState.guild.me.voice.connection.removeAllListeners();
-            botVoiceChannel.leave();
-        }
-
         // Protect bot from moving to different channels
         if (newState.member.id === newState.guild.me.id) {
             if (newState.channelID && newState.channelID !== botVoiceChannel.id) newState.guild.me.voice.setChannel(botVoiceChannel);
+        }
+
+        if (botVoiceChannel.members.size <= 1 && oldState.guild.me.voice.channelID) {
+            console.log(`[Radio Manager] Connection from guild ${newState.guild.name} has been closed due to inactivity.`);
+            oldState.guild.me.voice.connection.removeAllListeners();
+            botVoiceChannel.leave();
         }
     }
 
@@ -62,19 +65,44 @@ export default class RadioManager {
      * @returns {Promise<void>}
      */
     async streamNext(last: number): Promise<void> {
-        let randomizer: number = Math.floor(Math.random() * songs.length);
-        while (last === randomizer) randomizer = Math.floor(Math.random() * songs.length);
+        this.trackID = Math.floor(Math.random() * songs.length);
+        while (last === this.trackID) this.trackID = Math.floor(Math.random() * songs.length);
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(songs[randomizer].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
+        const player: BroadcastDispatcher = this.station.play(ytdl(songs[this.trackID].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
 
         player.on('error', () => {
-            console.log(`[Radio Manager] Occured problem while trying to play ${randomizer}'s song: ${songs[randomizer].title}\nSkipping to the other, random track!`);
+            console.log(`[Radio Manager] Occured problem while trying to play ${this.trackID}'s song: ${songs[this.trackID].title}\nSkipping to the other, random track!`);
             player.removeAllListeners();
-            return this.streamNext(randomizer);
+            return this.streamNext(this.trackID);
         });
 
         player.on('finish', () => {
-            return this.streamNext(randomizer);
+            return this.streamNext(this.trackID);
         });
+    }
+
+    /**
+     * Returns current song object.
+     * @returns {trackTypes}
+     */
+    getStreamDetails(): trackTypes {
+        return songs[this.trackID];
+    }
+
+    /**
+     * If multiple - Returns every author from new line.
+     * @param {string} [authors]
+     * @returns {string}
+     */
+    parseAuthors(authors: string): string {
+        if (!authors || authors === '') return 'Unknown';
+
+        if (!/,/g.test(authors)) return authors;
+        else {
+            const x: string[] = authors.split(', ');
+            const y: string[] = x[x.length - 1].split(' & ');
+            if (/&/g.test(x[x.length - 1])) x.pop();
+            return `${x.join(',\n')},\n${y.join(',\n')}`;
+        }
     }
 }

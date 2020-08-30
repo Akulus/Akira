@@ -22,9 +22,10 @@ export default class AkiraClient extends Client {
         });
 
         this.on('message', async (msg) => await this.commandManager.parseMessage(msg));
+        this.on('voiceStateUpdate', async (oldState, newState) => await this.radioManager.triggerMovement(oldState, newState));
     }
 
-    public readonly radioManager = new RadioManager(this)
+    public readonly radioManager = new RadioManager(this, this.voice.createBroadcast())
     public readonly commandManager = new CommandManager(this)
     public readonly db = new AsyncNedb<guildDataTypes>({ filename: join(__dirname, '..', '..', 'guildData.db'), inMemoryOnly: false })
 
@@ -50,13 +51,12 @@ export default class AkiraClient extends Client {
                 return new TypeError(error);
             });
 
+        console.log('[Initialization] Starting radio station...');
+        this.radioManager.streamNext(0);
+
         console.log('[Initialization] Finished! Logging into discord gateway...');
         this.login(token)
-            .then(() =>
-                console.log(
-                    `[READY] Successfully connected to discord servers.\nDetected ${this.guilds.cache.size} guild(s) which have total ${this.users.cache.size} member(s).`
-                )
-            )
+            .then(() => console.log('[READY] Successfully connected to discord servers.'))
             .catch(() => {
                 return new TypeError('Used bot token is invalid or discord servers are currently down.');
             });

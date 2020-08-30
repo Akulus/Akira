@@ -26,17 +26,12 @@ export = {
             if (!/^[0-9]+$/.test(args[1])) return msg.channel.send('⚠️ Invalid value. Provide an ID of voice channel where you want to set radio station.');
 
             const voiceChannel: VoiceChannel = msg.guild.channels.cache.get(args[1]) as VoiceChannel;
-            if (!voiceChannel || voiceChannel.type !== 'voice')
-                return msg.channel.send('⚠️ You provided an invalid voice channel ID. I could not find that channel on this server.');
+            if (!voiceChannel || voiceChannel.type !== 'voice') return msg.channel.send('⚠️ You provided an invalid voice channel ID. I could not find that channel on this server.');
 
             if (!msg.guild.me.permissionsIn(voiceChannel).has('CONNECT'))
-                return msg.channel.send(
-                    `⚠️ I connot connect to \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`
-                );
+                return msg.channel.send(`⚠️ I connot connect to \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`);
             else if (!msg.guild.me.permissionsIn(voiceChannel).has('SPEAK'))
-                return msg.channel.send(
-                    `⚠️ I connot speak on \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`
-                );
+                return msg.channel.send(`⚠️ I connot speak on \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`);
 
             await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { voiceChannelID: args[1] } }, { multi: false });
             return msg.channel.send(`📋 Successfully binded bot to \`${voiceChannel.name}\` channel.\nUse \`reconnect\` command to reset bot session.`);

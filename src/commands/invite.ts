@@ -2,7 +2,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import AkiraClient from '../utils/client';
 
 export = {
-    description: 'Sends back invite link.',
+    description: 'Allows you to invite bot to another server.',
     aliases: ['inv'],
 
     /**

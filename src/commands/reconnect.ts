@@ -17,7 +17,7 @@ export = {
         const guildData: guildDataTypes = await client.commandManager.getInfoFromDatabase(msg);
 
         if (!guildData.isEnabled) return msg.channel.send('⚠️ Radio is disabled on this server. Type: `config radio enable` to turn back on radio.');
-        else if (!guildData.voiceChannelID) return msg.channel.send('⚠️ Bot is not configured yet. Type `help start` to get more info how to configure radio for this server.');
+        else if (!guildData.voiceChannelID) return msg.channel.send('⚠️ Bot is not configured yet. Type `config channel <voice channel ID>` to bind bot to selected channel.');
 
         const botVoiceChannel: VoiceChannel = msg.guild.channels.cache.get(guildData.voiceChannelID) as VoiceChannel;
 

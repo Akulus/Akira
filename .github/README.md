@@ -2,10 +2,10 @@
 <h3 align="center">Your new music bot focused around music stations</h3>
 <p align="center">
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Razzels0/Akira">
-  <img alt="GitHub license" src="https://img.shields.io/badge/License-Apache--2.0-informational?logo=Apache%20Spark&logoColor=white">
+  <img alt="GitHub license" src="https://img.shields.io/badge/license-Apache--2.0-informational?logo=Apache%20Spark&logoColor=white">
   <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Razzels0/Akira/total?logo=GitHub">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Razzels0/Akira?logo=TypeScript">
-  <img alt="Discord main library" src="https://img.shields.io/badge/Library-Discord.js-blue?logo=Discord&logoColor=white">
+  <img alt="Discord main library" src="https://img.shields.io/badge/library-Discord.js-blue?logo=Discord&logoColor=white">
   <img alt="Prettier code style" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
 </p>
 

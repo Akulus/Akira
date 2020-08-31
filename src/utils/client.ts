@@ -25,6 +25,7 @@ export default class AkiraClient extends Client {
         this.on('voiceStateUpdate', async (oldState, newState) => await this.radioManager.triggerMovement(oldState, newState));
     }
 
+    public clientID: string
     public readonly radioManager = new RadioManager(this, this.voice.createBroadcast())
     public readonly commandManager = new CommandManager(this)
     public readonly db = new AsyncNedb<guildDataTypes>({ filename: join(__dirname, '..', '..', 'guildData.db'), inMemoryOnly: false })
@@ -36,6 +37,12 @@ export default class AkiraClient extends Client {
      */
     launch(token: string): TypeError | void {
         if (!token || token === '' || typeof token !== 'string') return new TypeError('Could not find valid bot token.');
+
+        console.log('[Initialization] Validating client ID...');
+        if (!process.env.CLIENT_ID || process.env.CLIENT_ID === '' || !/^[0-9]+$/.test(process.env.CLIENT_ID)) {
+            this.clientID = 'Unknown';
+            console.warn('[Warn] Client ID is invalid or does not exist. Disabled invite command.');
+        } else this.clientID = process.env.CLIENT_ID;
 
         console.log('[Initialization] Launching bot instance... Loading commands...');
         this.commandManager.registerCommands();

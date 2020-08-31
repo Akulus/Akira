@@ -1,19 +1,21 @@
 <h1 align="center">Akira あきら</h1>
 <h3 align="center">Your new music bot focused around music stations</h3>
 <p align="center">
-  <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Razzels0/Akira/total?logo=GitHub">
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Razzels0/Akira">
-  <img alt="GitHub license" src="https://img.shields.io/github/license/Razzels0/Akira?logo=Apache%20Spark&logoColor=white">
+  <img alt="GitHub license" src="https://img.shields.io/badge/License-Apache--2.0-informational?logo=Apache%20Spark&logoColor=white">
+  <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Razzels0/Akira/total?logo=GitHub">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Razzels0/Akira?logo=TypeScript">
   <img alt="Discord main library" src="https://img.shields.io/badge/Library-Discord.js-blue?logo=Discord&logoColor=white">
+  <img alt="Prettier code style" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
 </p>
 
 ---
 
-> Akira is probably the best music discord bot focused in 100% at to become radio station. Just fill .json file with your favourite songs and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality.
+> Akira is probably the best music discord bot focused in 100% at to become radio station. Just fill .json file with your favourite songs and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality. <br /> <br />
+##### ⚠️ Akira by default comes with 100+ anime themed songs inside `songs.json` file. Feel free to change that if u want.
 
 # 👋 Getting started
-1. Install all required programs & prepare bot files. [Click here to get more info.]
+1. Install all required programs & prepare bot files. ~~[Click here to get more info.]~~
 2. Rename `.env.example` file to `.env` and fill it with below scheme:
 - Don't even try to steal any of these ID's - they are here only as example.
 - To set more than 1 owner - add `,` between member ID's like I did below.
@@ -35,7 +37,9 @@ OWNERS=390394829789593601, 215553356452724747
 6. Done! At this point bot should successfuly stream music selected from your `songs.json` file. <br /> <br />
 
 # 📖 Other
-1. [Installation process.](xxx.com)
+1. ~~Installation process.~~ TODO
+2. ~~Command list~~ TODO
+3. ~~How to implement own music playlist~~ TODO
 
 <br /> <br />
 

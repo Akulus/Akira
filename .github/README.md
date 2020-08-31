@@ -1,4 +1,4 @@
-<h1 align="center">Akira あきら</h1>
+<h1 align="center">Akira アキラ</h1>
 <h3 align="center">Your new music bot focused around music stations</h3>
 <p align="center">
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Razzels0/Akira">
@@ -11,7 +11,8 @@
 
 ---
 
-> Akira is probably the best music discord bot focused in 100% at to become radio station. Just fill .json file with your favourite songs and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality. <br /> <br />
+> Akira is probably the best music discord bot focused in 100% at to become radio station. Just fill .json file with your favourite songs and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality.
+
 ##### ⚠️ Akira by default comes with 100+ anime themed songs inside `songs.json` file. Feel free to change that if u want.
 
 # 👋 Getting started

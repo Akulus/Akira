@@ -4,7 +4,7 @@ import AkiraClient from '../utils/client';
 export = {
     description: 'Allows to configure bot parameters for your server.',
     syntax: '<prefix|channel|radio> <value>',
-    examples: ['prefix >', 'prefix !!', 'channel 696772062601150518', 'radio enable', 'radio disable'],
+    examples: ['prefix >', 'prefix !!', 'channel 696772062601150518\n', 'radio enable', 'radio disable'],
     aliases: ['set', 'option'],
     reqPerms: ['ADMINISTRATOR'],
 

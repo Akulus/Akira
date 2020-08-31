@@ -5,7 +5,6 @@ import trackTypes from '../typings/track';
 export = {
     description: 'Shows currently playing track title & author.',
     aliases: ['np', 'nowplaying', 'streaming'],
-    reqPerms: [],
 
     /**
      * Main command function, generator.

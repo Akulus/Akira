@@ -5,7 +5,7 @@ import guildDataTypes from '../typings/database';
 export = {
     description: 'Tries to automatically resolve problem with connection.',
     aliases: ['fix', 'repair', 'recc'],
-    reqPerms: [],
+    reqPerms: ['MOVE_MEMBERS'],
 
     /**
      * Main command function, generator.

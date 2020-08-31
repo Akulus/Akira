@@ -24,6 +24,7 @@ export default class CommandManager {
 
             const command: commandTypes = require(join(__dirname, "..", "commands", file)) // eslint-disable-line
             command.name = file.slice(0, -3);
+            if (!command.reqPerms) command.reqPerms = [];
 
             this.commands.set(command.name, command);
         }
@@ -97,5 +98,24 @@ export default class CommandManager {
             data.forEach((id) => owners.push(id));
         }
         return owners;
+    }
+
+    /**
+     * Generates list with all available commands and their descriptions.
+     * @returns {string}
+     */
+    generateHelpPage(): string {
+        return this.commands.map((cmd) => `**» ${cmd.name} ${cmd.syntax ? cmd.syntax : ''}**\n*${cmd.description}*`).join('\n\n');
+    }
+
+    /**
+     * Returns data about command if exist.
+     * @param {string} [name]
+     * @returns {commandTypes | undefined}
+     */
+    getCommandInfo(name: string): commandTypes | undefined {
+        const command: commandTypes | undefined = this.commands.find((c) => c.name === name || (c.aliases && c.aliases.includes(name)));
+        if (!command) return undefined;
+        else return command;
     }
 }

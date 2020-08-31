@@ -28,16 +28,7 @@ export default class RadioManager {
 
         // Check if member just joined to a server - if yes, check if it's first - if yes, spawn connection
         if (newState.channelID && newState.channelID === guildData.voiceChannelID && newState.channel.members.size === 1) {
-            if (newState.channel.joinable && newState.channel.speakable && !newState.channel.full && guildData.isEnabled) {
-                await newState.channel.join().then((connection) => {
-                    connection.voice.setSelfDeaf(true);
-                    connection.play(this.station).on('error', (err) => {
-                        console.log(`[Radio Manager] Guild ${newState.guild.name} run into a problem with connection.\n${err}`);
-                        connection.removeAllListeners();
-                        newState.channel.leave();
-                    });
-                });
-            }
+            if (guildData.isEnabled) await this.connectToStream(newState.channel);
         }
 
         // Run timer if bot is on empty channel - leave from voice channel after 30 seconds
@@ -52,11 +43,7 @@ export default class RadioManager {
             if (newState.channelID && newState.channelID !== botVoiceChannel.id) newState.guild.me.voice.setChannel(botVoiceChannel);
         }
 
-        if (botVoiceChannel.members.size <= 1 && oldState.guild.me.voice.channelID) {
-            console.log(`[Radio Manager] Connection from guild ${newState.guild.name} has been closed due to inactivity.`);
-            oldState.guild.me.voice.connection.removeAllListeners();
-            botVoiceChannel.leave();
-        }
+        if (botVoiceChannel.members.size <= 1 && oldState.guild.me.voice.channelID) return this.disconnectFromStream(botVoiceChannel);
     }
 
     /**
@@ -65,6 +52,7 @@ export default class RadioManager {
      * @returns {Promise<void>}
      */
     async streamNext(last: number): Promise<void> {
+        if (!last) last = 0;
         this.trackID = Math.floor(Math.random() * songs.length);
         while (last === this.trackID) this.trackID = Math.floor(Math.random() * songs.length);
 
@@ -90,6 +78,44 @@ export default class RadioManager {
     }
 
     /**
+     * Connects bot to a voice channel and subscribes broadcast.
+     * @param {VoiceChannel} [channel]
+     * @returns {Promise<void>}
+     */
+    async connectToStream(channel: VoiceChannel): Promise<void> {
+        if (!channel) return;
+
+        if (channel.joinable && channel.speakable && !channel.full) {
+            await channel.join().then((connection) => {
+                connection.voice.setSelfDeaf(true);
+                connection.play(this.station).on('error', (err) => {
+                    console.log(`[Radio Manager] Guild ${channel.guild.name} run into a problem with connection.\n${err}`);
+                    connection.removeAllListeners();
+                    channel.leave();
+                });
+            });
+        }
+        return;
+    }
+
+    /**
+     * Disconnects bot from a voice channel and unsubscribes broadcast.
+     * @param {VoiceChannel} [channel]
+     * @returns {void}
+     */
+    disconnectFromStream(channel: VoiceChannel): void {
+        if (!channel) return;
+        try {
+            channel.guild.me.voice.connection.dispatcher.destroy();
+        } catch (err) {} // eslint-disable-line
+
+        try {
+            channel.guild.me.voice.connection.removeAllListeners();
+        } catch (e) {} // eslint-disable-line
+        channel.leave();
+    }
+
+    /**
      * If multiple - Returns every author from new line.
      * @param {string} [authors]
      * @returns {string}
@@ -97,11 +123,11 @@ export default class RadioManager {
     parseAuthors(authors: string): string {
         if (!authors || authors === '') return 'Unknown';
 
-        if (!/,/g.test(authors)) return authors;
+        if (!/,/.test(authors)) return authors;
         else {
             const x: string[] = authors.split(', ');
             const y: string[] = x[x.length - 1].split(' & ');
-            if (/&/g.test(x[x.length - 1])) x.pop();
+            if (/&/.test(x[x.length - 1])) x.pop();
             return `${x.join(',\n')},\n${y.join(',\n')}`;
         }
     }

@@ -9,8 +9,8 @@ export = {
 
     /**
      * Main command function, generator.
+     * @param {AkiraClient} [client]
      * @param {Message} [msg]
-     * @param {string[]} [args]
      * @returns {Promise<Message>}
      */
     async execute(client: AkiraClient, msg: Message): Promise<Message> {

@@ -22,7 +22,7 @@ export default class CommandManager {
         for (const file of readdirSync(join(__dirname, '..', 'commands'))) {
             if (!file.endsWith('.js')) return new TypeError(`[Command Manager] File ${file} have invalid file extension.`);
 
-            const command: commandTypes = require(join(__dirname, "..", "commands", file)) //eslint-disable-line
+            const command: commandTypes = require(join(__dirname, "..", "commands", file)) // eslint-disable-line
             command.name = file.slice(0, -3);
 
             this.commands.set(command.name, command);
@@ -81,6 +81,7 @@ export default class CommandManager {
 
     /**
      * Parses owners string from .env file and splits it.
+     * @private
      * @returns {string[]}
      */
     getOwnerIDs(): string[] {

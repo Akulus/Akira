@@ -16,7 +16,7 @@
 ##### ⚠️ Akira by default comes with 100+ anime themed songs inside `songs.json` file. Feel free to change that if u want.
 
 # 👋 Getting started
-1. Install all required programs & prepare bot files. ~~[Click here to get more info.]~~
+1. Install all required programs & prepare bot files. [Click here to get more info.](https://github.com/Razzels0/Akira/blob/master/.github/INSTALLATION.md)
 2. Rename `.env.example` file to `.env` and fill it with below scheme:
 - Don't even try to steal any of these ID's - they are here only as example.
 - To set more than 1 owner - add `,` between member ID's like I did below.
@@ -28,7 +28,6 @@ OWNERS=390394829789593601, 215553356452724747
 > If you don't have your own bot yet - [Create one](https://discord.com/developers/applications) <br />
 
 3. Open console inside bot files and type `npm run start` command to launch bot.
-- If you got any error - that means you make something bad during installation process or one of your data inside `.env` file is invalid.
 4. Add bot to your server and make sure that it have enough permissions before you go to step 5.
 - Example invitation: `https://discord.com/oauth2/authorize?client_id=BOT_CLIENT_ID&scope=bot&permissions=0` <br /> *(remember to fill client ID)*
 5. Configure bot so it will be able to join and start streaming music to your voice channel. *('a!' is a default prefix)* <br />
@@ -38,9 +37,9 @@ OWNERS=390394829789593601, 215553356452724747
 6. Done! At this point bot should successfuly stream music selected from your `songs.json` file. <br /> <br />
 
 # 📖 Other
-1. ~~Installation process.~~ TODO
-2. ~~Command list~~ TODO
-3. ~~How to implement own music playlist~~ TODO
+1. [Installation process](https://github.com/Razzels0/Akira/blob/master/.github/INSTALLATION.md)
+2. [Command list](https://github.com/Razzels0/Akira/blob/master/.github/COMMANDS.md)
+3. [How to implement own music playlist](https://github.com/Razzels0/Akira/blob/master/.github/STATION.md)
 
 <br /> <br />
 

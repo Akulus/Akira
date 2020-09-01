@@ -32,7 +32,7 @@ export = {
             helpInfo.setTitle(`🔎 Viewing command ⇒ ${command.name}`);
             helpInfo.addField('Usage', `\`${command.name}${command.syntax ? ` ${command.syntax}` : ''}\``, true);
             if (command.aliases) helpInfo.addField('Aliases', command.aliases.map((a) => `\`${a}\``).join(', '), true);
-            helpInfo.addField('Additional requirements', `Need Owner? ${command.reqOwner ? '`Yes' : '`No`'}\nPermissions? \`${checkPermissions(command.reqPerms)}\``, true);
+            helpInfo.addField('Additional requirements', `Need Owner? ${command.reqOwner ? '`Yes`' : '`No`'}\nPermissions? \`${checkPermissions(command.reqPerms)}\``, true);
             helpInfo.addField('‎', '‎', false);
             if (command.examples) helpInfo.addField('Examples:', `\`\`\`${command.examples.map((ex) => `✩ ${command.name} ${ex}`).join('\n')}\`\`\``, true);
             helpInfo.addField('Description', `\`\`\`${command.description}\`\`\``, true);

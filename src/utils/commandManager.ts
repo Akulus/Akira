@@ -12,7 +12,7 @@ export default class CommandManager {
 
     private readonly client: AkiraClient
     private readonly commands = new Collection<string, commandTypes>()
-    private readonly owners: string[] = this.getOwnerIDs()
+    public readonly owners: string[] = this.getOwnerIDs()
 
     /**
      * Detects & binds all command files.

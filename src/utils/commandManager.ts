@@ -25,6 +25,7 @@ export default class CommandManager {
             const command: commandTypes = require(join(__dirname, "..", "commands", file)) // eslint-disable-line
             command.name = file.slice(0, -3);
             if (!command.reqPerms) command.reqPerms = [];
+            if (!command.isHidden) command.isHidden = false;
 
             this.commands.set(command.name, command);
         }
@@ -105,7 +106,10 @@ export default class CommandManager {
      * @returns {string}
      */
     generateHelpPage(): string {
-        return this.commands.map((cmd) => `**» ${cmd.name} ${cmd.syntax ? cmd.syntax : ''}**\n*${cmd.description}*`).join('\n\n');
+        return this.commands
+            .filter((cmd) => cmd.isHidden === false)
+            .map((cmd) => `**» ${cmd.name} ${cmd.syntax ? cmd.syntax : ''}**\n*${cmd.description}*`)
+            .join('\n\n');
     }
 
     /**

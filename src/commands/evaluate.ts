@@ -8,6 +8,7 @@ export = {
     examples: ['1+2', 'client.guilds.cache.type'],
     aliases: ['eval'],
     reqOwner: true,
+    isHidden: true,
 
     /**
      * Main command function, generator.

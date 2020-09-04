@@ -8,6 +8,7 @@ interface commandTypes {
     aliases?: string[]
     reqOwner?: boolean
     reqPerms?: BitFieldResolvable<PermissionString>
+    isHidden?: boolean
     execute: Function //eslint-disable-line
 }
 

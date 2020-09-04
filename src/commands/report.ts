@@ -27,17 +27,17 @@ export = {
             .setTimestamp();
 
         client.commandManager.owners.forEach((ownerID) => {
-            client.users.fetch(ownerID, true, false).then((owner) => {
-                owner
-                    .send(reportInfo)
-                    .catch((e) =>
-                        console.warn(
-                            `[Warn] Bot owner - ${owner.tag} (${ownerID}) seems to have disabled DM messages from bot or does not have any way of connection. I can't show you new report message because of that.`
-                        )
+            client.users.fetch(ownerID, true, false).then(async (owner) => {
+                try {
+                    await owner.send(reportInfo);
+                } catch (e) {
+                    console.warn(
+                        `[Warn] Bot owner - ${owner.tag} (${ownerID}) seems to have disabled DM messages from bot or does not have any way of connection. I can't show you new report message because of that.`
                     );
+                }
             });
         });
 
-        return msg.channel.send('✉️ Message has been send. One of my masters should read it soon.\nDoes you need a fast help? Open new issue here: <https://github.com/Razzels0/Akira/issues>');
+        return msg.channel.send('✉️ Message has been send. One of my masters should read it soon. Do you need fast help? Open new issue here: <https://github.com/Razzels0/Akira/issues>');
     }
 }

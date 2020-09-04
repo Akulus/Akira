@@ -9,12 +9,12 @@ export default class RadioManager {
     constructor(client: AkiraClient, broadcast: VoiceBroadcast) {
         this.client = client;
         this.station = broadcast;
-        this.trackID = Math.floor(Math.random() * songs.length);
+        this.lastTracks = [];
     }
 
     private readonly client: AkiraClient
     private readonly station: VoiceBroadcast
-    private trackID: number
+    private lastTracks: Array<number>
 
     /**
      * Detects when bot should join/leave.
@@ -48,24 +48,21 @@ export default class RadioManager {
 
     /**
      * Main function that decide what should be played via broadcast.
-     * @param {number} [last]
      * @returns {Promise<void>}
      */
-    async streamNext(last: number): Promise<void> {
-        if (!last) last = 0;
-        this.trackID = Math.floor(Math.random() * songs.length);
-        while (last === this.trackID) this.trackID = Math.floor(Math.random() * songs.length);
+    async streamNext(): Promise<void> {
+        const selected: number = this.getTrueRandom();
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(songs[this.trackID].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
+        const player: BroadcastDispatcher = this.station.play(ytdl(songs[selected].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
 
         player.on('error', () => {
-            console.log(`[Radio Manager] Occured problem while trying to play ${this.trackID}'s song: ${songs[this.trackID].title}\nSkipping to the other, random track!`);
+            console.log(`[Radio Manager] Occured problem while trying to play ${selected}'s song: ${songs[selected].title}\nSkipping to the other, random track!`);
             player.removeAllListeners();
-            return this.streamNext(this.trackID);
+            return this.streamNext();
         });
 
         player.on('finish', () => {
-            return this.streamNext(this.trackID);
+            return this.streamNext();
         });
     }
 
@@ -74,7 +71,7 @@ export default class RadioManager {
      * @returns {trackTypes}
      */
     getStreamDetails(): trackTypes {
-        return songs[this.trackID];
+        return songs[this.lastTracks[this.lastTracks.length - 1]];
     }
 
     /**
@@ -130,5 +127,19 @@ export default class RadioManager {
             if (/&/.test(x[x.length - 1])) x.pop();
             return `${x.join(',\n')},\n${y.join(',\n')}`;
         }
+    }
+
+    /**
+     * Generates truly random number that can be the same like the last 10.
+     * @returns {number}
+     */
+    getTrueRandom(): number {
+        let x: number = Math.floor(Math.random() * songs.length);
+        while (this.lastTracks.includes(x)) x = Math.floor(Math.random() * songs.length);
+
+        this.lastTracks.push(x);
+        if (this.lastTracks.length > 10) this.lastTracks.shift();
+
+        return this.lastTracks[this.lastTracks.length - 1];
     }
 }

@@ -59,7 +59,7 @@ export default class AkiraClient extends Client {
             });
 
         console.log('[Initialization] Starting radio station...');
-        this.radioManager.streamNext(0);
+        this.radioManager.streamNext();
 
         console.log('[Initialization] Finished! Logging into discord gateway...');
         this.login(token)

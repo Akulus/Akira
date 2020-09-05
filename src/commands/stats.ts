@@ -23,6 +23,7 @@ export = {
             .addField('Version', `v${version}`, true)
             .addField('Source code', '[Github](https://github.com/Razzels0/Akira)', true)
             .addField('Library', '[Discord.js](https://discord.js.org/#/)', true)
+            .addField('Language', 'TypeScript', true)
             .setTimestamp();
 
         return msg.channel.send(statsInfo);

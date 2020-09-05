@@ -1,6 +1,6 @@
 {
   "name": "akira",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Akira is the best radio bot focused around anime music stations.",
   "main": "dist/src/akira.js",
   "engines": {

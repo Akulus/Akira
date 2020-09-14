@@ -3,6 +3,7 @@ import RadioManager from './radioManager';
 import CommandManager from './commandManager';
 import AsyncNedb from 'nedb-async';
 import { join } from 'path';
+import logger from './logger';
 import guildDataTypes from '../typings/database';
 
 export default class AkiraClient extends Client {
@@ -26,6 +27,7 @@ export default class AkiraClient extends Client {
     }
 
     public clientID: string
+    public readonly log = logger
     public readonly radioManager = new RadioManager(this, this.voice.createBroadcast())
     public readonly commandManager = new CommandManager(this)
     public readonly db = new AsyncNedb<guildDataTypes>({ filename: join(__dirname, '..', '..', 'guildData.db'), inMemoryOnly: false })
@@ -33,39 +35,41 @@ export default class AkiraClient extends Client {
     /**
      * Initializes all required operations to launch bot shard.
      * @param {string} [token]
-     * @returns {TypeError | void}
+     * @returns {Promise<void>}
      */
-    launch(token: string): TypeError | void {
-        if (!token || token === '' || typeof token !== 'string') return new TypeError('Could not find valid bot token.');
+    async launch(token: string): Promise<void> {
+        if (!token || token === '' || typeof token !== 'string') this.log('Could not find valid bot token.', -10);
 
-        console.log('[Initialization] Validating client ID...');
+        this.log('Validating client ID...', -1);
         if (!process.env.CLIENT_ID || process.env.CLIENT_ID === '' || !/^[0-9]+$/.test(process.env.CLIENT_ID)) {
             this.clientID = 'Unknown';
-            console.warn('[Warn] Client ID is invalid or does not exist. Disabled invite command.');
+            this.log('Client ID is invalid or does not exist. Disabled invite command.', 2);
         } else this.clientID = process.env.CLIENT_ID;
 
-        console.log('[Initialization] Launching bot instance... Loading commands...');
+        this.log('Constructing new Command Manager...', -1);
         this.commandManager.registerCommands();
 
-        console.log('[Initialization] Loading database...');
-        this.db
+        this.log('Loading database files...', -1);
+        await this.db
             .asyncLoadDatabase()
             .then(() => {
-                console.log('[Database] Successfully loaded.');
+                this.log('Successfully loaded!', -3);
                 this.db.persistence.setAutocompactionInterval(300000);
             })
             .catch((error) => {
-                return new TypeError(error);
+                return this.log(String(error), -10);
             });
 
-        console.log('[Initialization] Starting radio station...');
-        this.radioManager.streamNext();
+        this.log('Constructing new Radio Manager...', -1);
+        await this.radioManager.registerPlaylists();
+        this.radioManager.resolvePlaylistToStream(process.env.DEFAULT_PLAYLIST_TAG);
+        this.radioManager.stream();
 
-        console.log('[Initialization] Finished! Logging into discord gateway...');
+        this.log('Finished basic configuration. Logging into discord gateway...', -1);
         this.login(token)
-            .then(() => console.log('[READY] Successfully connected to discord servers.'))
+            .then(() => this.log('Successfully connected to discord servers.'))
             .catch(() => {
-                return new TypeError('Used bot token is invalid or discord servers are currently down.');
+                return this.log('Used bot token is invalid or discord servers are currently down.', -10);
             });
     }
 

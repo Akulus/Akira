@@ -1,9 +1,10 @@
 import AkiraClient from './client';
-import { VoiceState, VoiceChannel, VoiceBroadcast, BroadcastDispatcher } from 'discord.js';
+import { VoiceState, VoiceChannel, VoiceBroadcast, BroadcastDispatcher, Collection } from 'discord.js';
 import guildDataTypes from '../typings/database';
-import songs from '../songs.json';
 import ytdl from 'ytdl-core';
-import trackTypes from '../typings/track';
+import { readdirSync } from 'fs';
+import { join } from 'path';
+import { playlistTypes, trackTypes } from '../typings/playlist';
 
 export default class RadioManager {
     constructor(client: AkiraClient, broadcast: VoiceBroadcast) {
@@ -12,9 +13,11 @@ export default class RadioManager {
         this.lastTracks = [];
     }
 
+    private readonly playlists = new Collection<string, playlistTypes>()
     private readonly client: AkiraClient
     private readonly station: VoiceBroadcast
-    private lastTracks: Array<number>
+    private readonly lastTracks: Array<number>
+    private playlist: playlistTypes
 
     /**
      * Detects when bot should join/leave.
@@ -47,22 +50,60 @@ export default class RadioManager {
     }
 
     /**
+     * Detects & loads default selected playlist.
+     * @returns {Promise<void>}
+     */
+    async registerPlaylists(): Promise<void> {
+        for (const playlist of readdirSync(join(__dirname, '..', 'playlists'))) {
+            if (!playlist.endsWith('.json')) return this.client.log(`Playlist ${playlist} have invalid file extension.`, -5);
+
+            const station: playlistTypes = require(join(__dirname, "..", "playlists", playlist)) // eslint-disable-line
+
+            if (!station.title || !station.tag) return this.client.log(`Playlist "${playlist}" does not have a title or unique tag.`, -5);
+            else if (station.title.length > 24 || station.tag.length > 5) return this.client.log(`Playlist ${station.title} have too long name or tag.\nLimits: Title - 24, TAG - 5`, -5);
+            else if (!station.songs || station.songs.length === 0) return this.client.log(`Playlist ${station.title} is empty.`, -5);
+
+            this.playlists.set(station.tag, station);
+        }
+        if (this.playlists.size === 0) return this.client.log('I could not find any working playlists. Please define at least 1 to start.', -10);
+        this.client.log(`Successfully detected & loaded playlist(s): ${this.playlists.map((station) => station.title).join(', ')}.`, -5);
+    }
+
+    /**
+     * Prepare & tries to load selected playlist.
+     * Returns 0 if everything is correct and 1 if error occured.
+     * @param {string} [tag]
+     * @returns {void}
+     */
+    resolvePlaylistToStream(tag: string): void {
+        const selectedPlaylist: playlistTypes = this.playlists.find((p) => p.tag.toLowerCase() === tag.toLowerCase() || p.title.toLowerCase() === tag.toLowerCase());
+        if (!selectedPlaylist) return this.client.log(`I could find any working playlist registered under "${tag.toUpperCase()}" TAG. Check your .env file.`, -10);
+
+        this.playlist = selectedPlaylist;
+        return this.client.log(
+            `Set main playlist to: [${selectedPlaylist.tag.toUpperCase()}] ${selectedPlaylist.title}${selectedPlaylist.author ? `\nCreated by ${selectedPlaylist.author}.` : ''}`,
+            -5
+        );
+        //#TODO - Create smooth volume changing, wave style music switcher
+    }
+
+    /**
      * Main function that decide what should be played via broadcast.
      * @returns {Promise<void>}
      */
-    async streamNext(): Promise<void> {
+    async stream(): Promise<void> {
         const selected: number = this.getTrueRandom();
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(songs[selected].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
+        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
 
         player.on('error', () => {
-            console.log(`[Radio Manager] Occured problem while trying to play ${selected}'s song: ${songs[selected].title}\nSkipping to the other, random track!`);
+            this.client.log(`Occured problem while trying to play ${selected}'s song: ${this.playlist.songs[selected].title}\nSkipping to the other, random track!`, 2);
             player.removeAllListeners();
-            return this.streamNext();
+            return this.stream();
         });
 
         player.on('finish', () => {
-            return this.streamNext();
+            return this.stream();
         });
     }
 
@@ -71,7 +112,7 @@ export default class RadioManager {
      * @returns {trackTypes}
      */
     getStreamDetails(): trackTypes {
-        return songs[this.lastTracks[this.lastTracks.length - 1]];
+        return this.playlist.songs[this.lastTracks[this.lastTracks.length - 1]];
     }
 
     /**
@@ -86,7 +127,7 @@ export default class RadioManager {
             await channel.join().then((connection) => {
                 connection.voice.setSelfDeaf(true);
                 connection.play(this.station).on('error', (err) => {
-                    console.log(`[Radio Manager] Guild ${channel.guild.name} run into a problem with connection.\n${err}`);
+                    this.client.log(`Guild ${channel.guild.name} run into a problem with connection.\n${err}`, 1);
                     connection.removeAllListeners();
                     channel.leave();
                 });
@@ -134,8 +175,8 @@ export default class RadioManager {
      * @returns {number}
      */
     getTrueRandom(): number {
-        let x: number = Math.floor(Math.random() * songs.length);
-        while (this.lastTracks.includes(x)) x = Math.floor(Math.random() * songs.length);
+        let x: number = Math.floor(Math.random() * this.playlist.songs.length);
+        while (this.lastTracks.includes(x)) x = Math.floor(Math.random() * this.playlist.songs.length);
 
         this.lastTracks.push(x);
         if (this.lastTracks.length > 10) this.lastTracks.shift();

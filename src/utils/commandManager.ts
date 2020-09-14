@@ -20,7 +20,7 @@ export default class CommandManager {
      */
     registerCommands(): TypeError | void {
         for (const file of readdirSync(join(__dirname, '..', 'commands'))) {
-            if (!file.endsWith('.js')) return new TypeError(`[Command Manager] File ${file} have invalid file extension.`);
+            if (!file.endsWith('.js')) return this.client.log(`File ${file} have invalid file extension. I can't load it.`, -2);
 
             const command: commandTypes = require(join(__dirname, "..", "commands", file)) // eslint-disable-line
             command.name = file.slice(0, -3);
@@ -29,7 +29,7 @@ export default class CommandManager {
 
             this.commands.set(command.name, command);
         }
-        console.log(`[Command Manager] Detected ${this.commands.size} commands.`);
+        return this.client.log(`Detected ${this.commands.size} command(s).`, -2);
     }
 
     /**

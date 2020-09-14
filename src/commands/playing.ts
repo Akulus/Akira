@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js';
+import { trackTypes } from '../typings/playlist';
 import AkiraClient from '../utils/client';
-import trackTypes from '../typings/track';
 
 export = {
     description: 'Shows currently playing track title & author.',

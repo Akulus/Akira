@@ -32,7 +32,7 @@ export = {
 
             if (msg.guild.me.voice.channel) {
                 client.radioManager.disconnectFromStream(voiceChannel);
-                await sleep(500);
+                await client.sleep(500);
                 await client.radioManager.connectToStream(voiceChannel);
             } else await client.radioManager.connectToStream(voiceChannel);
 
@@ -77,13 +77,4 @@ export = {
             }
         } else return msg.channel.send('🔎 Invalid parameter. Available options are: `prefix`, `channel` & `radio`.');
     }
-}
-
-/**
- * Waits set amount of time.
- * @param {number} ms
- * @returns {void}
- */
-async function sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
 }

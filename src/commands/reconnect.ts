@@ -33,7 +33,7 @@ export = {
             console.log(`[Radio Manager] Reconnecting guild ${msg.guild.name} at user request.`);
 
             client.radioManager.disconnectFromStream(botVoiceChannel);
-            await sleep(500);
+            await client.sleep(500);
             await client.radioManager.connectToStream(botVoiceChannel);
             return msg.channel.send(`🛠️ Successfully **established** connection with \`${botVoiceChannel.name}\` channel.`);
         } else {
@@ -41,13 +41,4 @@ export = {
             return msg.channel.send(`🛠️ Successfully **established** connection with \`${botVoiceChannel.name}\` channel.`);
         }
     }
-}
-
-/**
- * Waits set amount of time.
- * @param {number} ms
- * @returns {void}
- */
-async function sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
 }

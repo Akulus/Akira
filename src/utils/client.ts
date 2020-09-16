@@ -85,4 +85,13 @@ export default class AkiraClient extends Client {
         }
         return true;
     }
+
+    /**
+     * Waits set amount of time.
+     * @param {number} ms
+     * @returns {void}
+     */
+    async sleep(ms: number): Promise<void> {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
 }

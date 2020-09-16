@@ -13,11 +13,11 @@ export default class RadioManager {
         this.lastTracks = [];
     }
 
-    private readonly playlists = new Collection<string, playlistTypes>()
+    public readonly playlists = new Collection<string, playlistTypes>()
     private readonly client: AkiraClient
     private readonly station: VoiceBroadcast
     private readonly lastTracks: Array<number>
-    private playlist: playlistTypes
+    public playlist: playlistTypes
 
     /**
      * Detects when bot should join/leave.
@@ -71,8 +71,7 @@ export default class RadioManager {
     }
 
     /**
-     * Prepare & tries to load selected playlist.
-     * Returns 0 if everything is correct and 1 if error occured.
+     * Prepare & tries to load default playlist.
      * @param {string} [tag]
      * @returns {void}
      */
@@ -83,6 +82,21 @@ export default class RadioManager {
         this.playlist = selectedPlaylist;
         return this.client.log(`Set main playlist to: [${selectedPlaylist.tag.toUpperCase()}] ${selectedPlaylist.title}${selectedPlaylist.author ? `\nCreated by ${selectedPlaylist.author}.` : ''}`);
         //#TODO - Create smooth volume changing, wave style music switcher
+    }
+
+    /**
+     * Searches & tries to load other playlist.
+     * @param {string} [query]
+     * @returns {number}
+     */
+    changePlaylistToStream(query: string): number {
+        const selectedPlaylist: playlistTypes = this.playlists.find((p) => p.tag.toLowerCase() === query.toLowerCase() || p.title.toLowerCase() === query.toLowerCase());
+        if (!selectedPlaylist) return 1;
+
+        this.playlist = selectedPlaylist;
+        this.forceSkip();
+        this.client.log(`Set main playlist to: [${selectedPlaylist.tag.toUpperCase()}] ${selectedPlaylist.title}${selectedPlaylist.author ? `\nCreated by ${selectedPlaylist.author}.` : ''}`);
+        return 0;
     }
 
     /**
@@ -103,6 +117,24 @@ export default class RadioManager {
         player.on('finish', () => {
             return this.stream();
         });
+    }
+
+    /**
+     * Forces radio Manager to skip currently played song.
+     * @returns {Promise<void>}
+     */
+    async forceSkip(): Promise<void> {
+        let x = 100;
+
+        while (x > 0) {
+            x = x - 10;
+            this.station.dispatcher.setVolumeLogarithmic(x / 100);
+            await this.client.sleep(500);
+        }
+
+        this.station.removeAllListeners();
+        this.stream();
+        return;
     }
 
     /**

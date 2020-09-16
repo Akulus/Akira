@@ -9,7 +9,7 @@ import chalk from 'chalk';
 export default function (msg: string, type = 0): void {
     if (!msg) return;
 
-    if (!['.', '!', '?', ']', ')', '>', '%', '$', '#'].includes(msg[msg.length - 1])) msg = msg + '.';
+    if (!['.', '!', '?', ']', ')', '>', '%', '$', '#'].includes(msg[msg.length - 1])) msg = `${msg}.`;
     const timestamp: string = new Date().toUTCString();
 
     switch (type) {
@@ -33,9 +33,6 @@ export default function (msg: string, type = 0): void {
         }
         case -4: {
             return console.log(`${chalk.gray(`[${timestamp}]`)} ${chalk.whiteBright.bold('[INIT] [RADIO MANAGER]')} ${msg}`);
-        }
-        case -5: {
-            return console.log(`${chalk.gray(`[${timestamp}]`)} ${chalk.magenta('[RADIO MANAGER]')} ${msg}`);
         }
         case -10: {
             console.error(`${chalk.gray(`[${timestamp}]`)} ${chalk.redBright.bold.underline('[CRITICAL ERROR]')} ${msg}`);

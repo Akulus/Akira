@@ -22,7 +22,7 @@ export default class RadioManager {
     /**
      * Detects when bot should join/leave.
      * @param {VoiceState} [oldState]
-     * @param {VoiceState} [oldState]
+     * @param {VoiceState} [newState]
      * @returns {Promise<void>}
      */
     async triggerMovement(oldState: VoiceState, newState: VoiceState): Promise<void> {
@@ -55,18 +55,19 @@ export default class RadioManager {
      */
     async registerPlaylists(): Promise<void> {
         for (const playlist of readdirSync(join(__dirname, '..', 'playlists'))) {
-            if (!playlist.endsWith('.json')) return this.client.log(`Playlist ${playlist} have invalid file extension.`, -5);
+            if (!playlist.endsWith('.json')) return this.client.log(`Playlist ${playlist} have invalid file extension.`, -4);
 
             const station: playlistTypes = require(join(__dirname, "..", "playlists", playlist)) // eslint-disable-line
 
-            if (!station.title || !station.tag) return this.client.log(`Playlist "${playlist}" does not have a title or unique tag.`, -5);
-            else if (station.title.length > 24 || station.tag.length > 5) return this.client.log(`Playlist ${station.title} have too long name or tag.\nLimits: Title - 24, TAG - 5`, -5);
-            else if (!station.songs || station.songs.length === 0) return this.client.log(`Playlist ${station.title} is empty.`, -5);
+            if (!station.title || !station.tag) return this.client.log(`Playlist "${playlist}" does not have a title or unique tag.`, -4);
+            else if (station.title.length > 24 || station.tag.length > 5) return this.client.log(`Playlist ${station.title} have too long name or tag.\nLimits: Title - 24, TAG - 5`, -4);
+            else if (!station.songs || station.songs.length === 0) return this.client.log(`Playlist ${station.title} is empty.`, -4);
+            else if (station.songs.length <= 10) return this.client.log(`Playlist ${station.title} can't be used because it needs to have more than 10 working songs.`, -4);
 
             this.playlists.set(station.tag, station);
         }
         if (this.playlists.size === 0) return this.client.log('I could not find any working playlists. Please define at least 1 to start.', -10);
-        this.client.log(`Successfully detected & loaded playlist(s): ${this.playlists.map((station) => station.title).join(', ')}.`, -5);
+        this.client.log(`Successfully detected & loaded playlist(s): ${this.playlists.map((station) => station.title).join(', ')}.`, -4);
     }
 
     /**
@@ -80,10 +81,7 @@ export default class RadioManager {
         if (!selectedPlaylist) return this.client.log(`I could find any working playlist registered under "${tag.toUpperCase()}" TAG. Check your .env file.`, -10);
 
         this.playlist = selectedPlaylist;
-        return this.client.log(
-            `Set main playlist to: [${selectedPlaylist.tag.toUpperCase()}] ${selectedPlaylist.title}${selectedPlaylist.author ? `\nCreated by ${selectedPlaylist.author}.` : ''}`,
-            -5
-        );
+        return this.client.log(`Set main playlist to: [${selectedPlaylist.tag.toUpperCase()}] ${selectedPlaylist.title}${selectedPlaylist.author ? `\nCreated by ${selectedPlaylist.author}.` : ''}`);
         //#TODO - Create smooth volume changing, wave style music switcher
     }
 

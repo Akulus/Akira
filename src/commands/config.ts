@@ -3,8 +3,8 @@ import AkiraClient from '../utils/client';
 
 export = {
     description: 'Allows to configure bot parameters for your server.',
-    syntax: '<prefix|channel|radio> <value>',
-    examples: ['prefix >', 'prefix !!', 'channel 696772062601150518\n', 'radio enable', 'radio disable'],
+    syntax: '<prefix|channel|radio|auto> [value]',
+    examples: ['prefix >', 'prefix !!', 'channel 696772062601150518\n', 'radio enable', 'radio disable', 'auto'],
     aliases: ['set', 'option'],
     reqPerms: ['ADMINISTRATOR'],
 
@@ -16,7 +16,30 @@ export = {
      * @returns {Promise<Message>}
      */
     async execute(client: AkiraClient, msg: Message, args: string[]): Promise<Message> {
-        if (!args || !args[1]) return msg.channel.send('🔎 Missing parameter *(or value)*. Use `help config` command to get more info.');
+        if (!args[0]) return msg.channel.send('🔎 Missing parameter. Use `help config` command to get more info.');
+
+        if (['auto', 'automatic', 'fix', 'find'].includes(args[0].toLowerCase())) {
+            if (!msg.member.voice.channel) return msg.channel.send('🔎 I could not define a correct voice channel. Please join to any before you use that command again.');
+
+            const voiceChannel: VoiceChannel = msg.member.voice.channel;
+
+            if (!msg.guild.me.permissionsIn(voiceChannel).has('CONNECT'))
+                return msg.channel.send(`⚠️ I connot connect to \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`);
+            else if (!msg.guild.me.permissionsIn(voiceChannel).has('SPEAK'))
+                return msg.channel.send(`⚠️ I connot speak on \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`);
+
+            await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { voiceChannelID: args[1], isEnabled: true } }, { multi: false });
+
+            if (msg.guild.me.voice.channel) {
+                client.radioManager.disconnectFromStream(voiceChannel);
+                await sleep(500);
+                await client.radioManager.connectToStream(voiceChannel);
+            } else await client.radioManager.connectToStream(voiceChannel);
+
+            return msg.channel.send(`📋 Successfully bound to **${voiceChannel.name}** and **enabled** radio. Enjoy!`);
+        }
+
+        if (!args[1]) return msg.channel.send('🔎 Missing value. Use `help config` command to get more info.');
 
         if (args[0].toLowerCase() === 'prefix') {
             if (args[1].length > 3) return msg.channel.send('⚠️ New prefix is too long. Prefix can use max `3` chars length.');
@@ -52,8 +75,15 @@ export = {
             } else {
                 return msg.channel.send('⚠️ Invalid statement. Decide if bot should restream music or not.');
             }
-        } else {
-            return msg.channel.send('🔎 Invalid parameter. Available options are: `prefix`, `channel` & `radio`.');
-        }
+        } else return msg.channel.send('🔎 Invalid parameter. Available options are: `prefix`, `channel` & `radio`.');
     }
+}
+
+/**
+ * Waits set amount of time.
+ * @param {number} ms
+ * @returns {void}
+ */
+async function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }

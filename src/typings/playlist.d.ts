@@ -6,8 +6,8 @@ interface playlistTypes {
 }
 
 interface trackTypes {
-    title: string
-    author: string
+    title?: string
+    author?: string
     url: string
 }
 

@@ -28,7 +28,7 @@ export = {
             else if (!msg.guild.me.permissionsIn(voiceChannel).has('SPEAK'))
                 return msg.channel.send(`⚠️ I connot speak on \`${voiceChannel.name}\`\nMake sure I always will have permissions to join & speak on selected channel.`);
 
-            await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { voiceChannelID: args[1], isEnabled: true } }, { multi: false });
+            await client.db.asyncUpdate({ guildID: msg.guild.id }, { $set: { voiceChannelID: voiceChannel.id, isEnabled: true } }, { multi: false });
 
             if (msg.guild.me.voice.channel) {
                 client.radioManager.disconnectFromStream(voiceChannel);
@@ -65,7 +65,7 @@ export = {
                 return msg.channel.send('📋 Successfully **enabled**. Bot will automatically join to the channel if detect movement.');
             } else if (['disable', 'off', 'stop'].includes(args[1].toLowerCase())) {
                 if (msg.guild.me.voice.channelID) {
-                    console.log(`[Radio Manager] Connection from guild ${msg.guild.name} has been closed at user request.`);
+                    client.log(`Connection from guild ${msg.guild.name} has been closed at user request.`);
                     msg.guild.me.voice.connection.removeAllListeners();
                     msg.guild.me.voice.channel.leave();
                 }

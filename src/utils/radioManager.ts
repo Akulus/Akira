@@ -146,6 +146,16 @@ export default class RadioManager {
     }
 
     /**
+     * Returns basic data about broadcast
+     * @returns {string}
+     */
+    async getBroadcastDetails(): Promise<string> {
+        return `Station: \`Akira Radio\`\nCurrent music plan:\n\`[${this.playlist.tag.toUpperCase()}] ${this.playlist.title}\`\nCurrent bitrate: \`120kbps\`\nConnections: \`${
+            this.station.subscribers.length
+        }\``;
+    }
+
+    /**
      * Connects bot to a voice channel and subscribes broadcast.
      * @param {VoiceChannel} [channel]
      * @returns {Promise<void>}

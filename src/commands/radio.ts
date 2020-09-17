@@ -4,7 +4,7 @@ import { trackTypes } from '../typings/playlist';
 import AkiraClient from '../utils/client';
 
 export = {
-    description: 'Shows currently playing track title & author.',
+    description: 'Shows info about radio stats, current playing song, etc.',
     aliases: ['stream', 'streaming'],
 
     /**

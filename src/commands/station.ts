@@ -3,7 +3,7 @@ import AkiraClient from '../utils/client';
 
 export = {
     description: 'Allows bot owners to switch music plan on live.',
-    syntax: '<playlist TAG or title>',
+    syntax: '[playlist TAG or title]',
     reqOwner: true,
 
     /**

@@ -106,7 +106,10 @@ export default class RadioManager {
     async stream(): Promise<void> {
         const selected: number = this.getTrueRandom();
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 12 << 25, liveBuffer: 75000 }), { highWaterMark: 1 });
+        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 4 << 25, filter: 'audioonly', quality: 'highestaudio' }), {
+            highWaterMark: 1,
+            bitrate: 'auto'
+        });
 
         player.on('error', () => {
             this.client.log(`Occured problem while trying to play ${selected}'s song: ${this.playlist.songs[selected].title}\nSkipping to the other, random track!`, 2);
@@ -150,7 +153,7 @@ export default class RadioManager {
      * @returns {string}
      */
     async getBroadcastDetails(): Promise<string> {
-        return `Station: \`Akira Radio\`\nCurrent music plan:\n\`[${this.playlist.tag.toUpperCase()}] ${this.playlist.title}\`\nCurrent bitrate: \`120kbps\`\nConnections: \`${
+        return `Station: \`Akira Radio\`\nCurrent music plan:\n\`[${this.playlist.tag.toUpperCase()}] ${this.playlist.title}\`\nCurrent bitrate: \`384kbps\`\nConnections: \`${
             this.station.subscribers.length
         }\``;
     }

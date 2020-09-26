@@ -107,12 +107,9 @@ export default class RadioManager {
     async stream(): Promise<void> {
         const selected: number = this.getTrueRandom();
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 4 << 25, filter: 'audioonly', quality: 'highestaudio' }), {
-            highWaterMark: 1,
-            bitrate: 'auto'
-        });
+        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 1 << 25, filter: 'audioonly', quality: 'highestaudio' }), { highWaterMark: 1 });
 
-        player.setVolumeLogarithmic(this.volume / 100);
+        this.station.dispatcher.setVolumeLogarithmic(this.volume / 100);
 
         player.on('error', () => {
             this.client.log(`Occured problem while trying to play ${selected}'s song: ${this.playlist.songs[selected].title}\nSkipping to the other, random track!`, 2);

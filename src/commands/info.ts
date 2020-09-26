@@ -4,6 +4,7 @@ import { version, description } from '../../package.json';
 
 export = {
     description: 'Shows some basic info about bot.',
+    aliases: ['bot', 'about'],
 
     /**
      * Main command function, generator.
@@ -20,7 +21,7 @@ export = {
             .addField('Language', 'TypeScript', true)
             .addField('Version', `v${version}`, true)
             .addField('Memory usage', `${Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100}MB`, true)
-            .addField('Source code', '[Github](https://github.com/Razzels0/Akira)', true)
+            .addField('Source code', '[Github](https://github.com/Znudzony/Akira)', true)
             .addField('Library', '[Discord.js](https://discord.js.org/#/)', true)
             .setTimestamp();
 

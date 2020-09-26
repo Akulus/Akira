@@ -30,7 +30,7 @@ export = {
             return msg.channel.send(`⚠️ You need to join to \`${botVoiceChannel.name}\` channel before you execute this command.`);
 
         if (msg.guild.me.voice.channelID) {
-            console.log(`[Radio Manager] Reconnecting guild ${msg.guild.name} at user request.`);
+            client.log(`Reconnecting guild ${msg.guild.name} at user request.`, 0);
 
             client.radioManager.disconnectFromStream(botVoiceChannel);
             await client.sleep(500);

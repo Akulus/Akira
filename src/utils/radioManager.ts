@@ -14,6 +14,7 @@ export default class RadioManager {
     }
 
     public readonly playlists = new Collection<string, playlistTypes>()
+    private readonly volume: number = this.getVolume()
     private readonly client: AkiraClient
     private readonly station: VoiceBroadcast
     private readonly lastTracks: Array<number>
@@ -111,6 +112,8 @@ export default class RadioManager {
             bitrate: 'auto'
         });
 
+        player.setVolumeLogarithmic(this.volume / 100);
+
         player.on('error', () => {
             this.client.log(`Occured problem while trying to play ${selected}'s song: ${this.playlist.songs[selected].title}\nSkipping to the other, random track!`, 2);
             player.removeAllListeners();
@@ -127,10 +130,10 @@ export default class RadioManager {
      * @returns {Promise<void>}
      */
     async forceSkip(): Promise<void> {
-        let x = 100;
+        let x: number = this.volume;
 
         while (x > 0) {
-            x = x - 10;
+            x = x - 1;
             this.station.dispatcher.setVolumeLogarithmic(x / 100);
             await this.client.sleep(500);
         }
@@ -153,9 +156,9 @@ export default class RadioManager {
      * @returns {string}
      */
     async getBroadcastDetails(): Promise<string> {
-        return `Station: \`Akira Radio\`\nCurrent music plan:\n\`[${this.playlist.tag.toUpperCase()}] ${this.playlist.title}\`\nCurrent bitrate: \`384kbps\`\nConnections: \`${
-            this.station.subscribers.length
-        }\``;
+        return `Station: \`Akira Radio\`\nCurrent music plan:\n\`[${this.playlist.tag.toUpperCase()}] ${this.playlist.title}\`\nCurrent bitrate: \`384kbps\`\nDefault volume: \`${
+            this.volume
+        }%\`\nConnections: \`${this.station.subscribers.length}\``;
     }
 
     /**
@@ -225,5 +228,23 @@ export default class RadioManager {
         if (this.lastTracks.length > 10) this.lastTracks.shift();
 
         return this.lastTracks[this.lastTracks.length - 1];
+    }
+
+    /**
+     * Returns number from 1 to 100 that validates stream volume level.
+     * @returns {number}
+     */
+    getVolume(): number {
+        let input: string | number = process.env.DEFAULT_VOLUME;
+
+        if (!input || input === '' || !/^[0-9]+$/.test(input)) {
+            this.client.log('You did not specify default volume option inside .env file or provided value is invalid. Automatically set volume to 15%', -4);
+            return 15;
+        }
+
+        input = Math.floor(Number(input));
+        if (input > 100) input = 100;
+        else if (input < 1) input = 1;
+        return input;
     }
 }

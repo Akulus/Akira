@@ -107,7 +107,7 @@ export default class RadioManager {
     async stream(): Promise<void> {
         const selected: number = this.getTrueRandom();
 
-        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 1 << 25, filter: 'audioonly', quality: 'highestaudio' }), { highWaterMark: 1 });
+        const player: BroadcastDispatcher = this.station.play(ytdl(this.playlist.songs[selected].url, { highWaterMark: 4 << 25, filter: 'audioonly', quality: 'highestaudio' }), { highWaterMark: 1, bitrate: 'auto' });
 
         this.station.dispatcher.setVolumeLogarithmic(this.volume / 100);
 

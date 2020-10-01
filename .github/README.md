@@ -26,8 +26,7 @@ Watch below video to see how you can easily install Akira on your computer/serve
 
 # 📖 Other
 1. [Detailed installation process](https://github.com/Razzels0/Akira/blob/master/.github/INSTALLATION.md)
-2. [Command list](https://github.com/Razzels0/Akira/blob/master/.github/COMMANDS.md)
-3. [How to implement own music playlist](https://github.com/Razzels0/Akira/blob/master/.github/PLAYLISTS.md)
+2. [How to implement own music playlist](https://github.com/Razzels0/Akira/blob/master/.github/PLAYLISTS.md)
 
 <br /> <br />
 

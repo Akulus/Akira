@@ -15,13 +15,13 @@
 # 👋 Getting started
 ### 🛠️ **Requirements**
 - [Node.js](https://nodejs.org/en/) *~14.8.0*
-- NPM *~6.14.7 - Node.js adds NPM automatically*
 - [FFmpeg](https://ffmpeg.org/)
-- [Python](https://www.python.org/) ~3.8.5
+- [Python](https://www.python.org/) ~3.8.5 <br />
 ⚠️ Node.js can download python & other required tools if you install all addiditonal elements during installation.
 
 ### 🎥 **Tutorial on YouTube**
 Watch below video to see how you can easily install Akira on your computer/server:
+
 [![](http://img.youtube.com/vi/39dwuEnMmus/0.jpg)](http://www.youtube.com/watch?v=39dwuEnMmus "Akira radio bot [INSTALLATION TUTORIAL]")
 
 # 📖 Other

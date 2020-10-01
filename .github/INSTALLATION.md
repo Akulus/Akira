@@ -4,15 +4,14 @@ Follow below steps to install & run Akira on your computer. Below tutorial was m
 
 ### 🛠️ **Requirements**
 - [Node.js](https://nodejs.org/en/) *~14.8.0*
-- NPM *~6.14.7 - Node.js adds NPM automatically*
 - [FFmpeg](https://ffmpeg.org/)
 - [Python](https://www.python.org/) ~3.8.5
 
 ⚠️ Node.js can download python & other required tools if you install all addiditonal elements during installation.
 
 ### 📦 **Installation**
-0. Download all needed programs from requirements showed higher.
-1. Download latest stable version of Akira - *[Go to releases](https://github.com/Razzels0/Akira/releases/)*.
+0. Download all needed programs from higher requirements tab.
+1. Download latest stable version of Akira - *[Go to releases](https://github.com/Znudzony/Akira/releases/)*.
 2. Unzip package to any folder & open it.
 3. Open console & type `npm install` to download & install all required dependencies.
 4. Rename `.env.example` file to `.env` and fill it with below scheme:
@@ -22,6 +21,8 @@ Follow below steps to install & run Akira on your computer. Below tutorial was m
 BOT_TOKEN=Njc4MzQqMzM4NTA0MzY3MDv0.XkhYmg.ZY_D9S7Ug-GxbbdLidbjBf5JXj7
 CLIENT_ID=678341338504364074
 OWNERS=390394829789593601, 215553356452724747
+DEFAULT_PLAYLIST_TAG=AMS
+DEFAULT_VOLUME=35
 ```
 > If you don't have your own bot yet - [Create one](https://discord.com/developers/applications) <br />
 

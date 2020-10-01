@@ -10,9 +10,7 @@
 
 ---
 
-> Akira is probably the best music discord bot focused in 100% at to become radio station. Just fill .json file with your favourite songs and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality.
-
-##### ⚠️ Akira by default comes with 100+ anime themed songs inside `songs.json` file. Feel free to change that if u want.
+> Akira is probably the best music discord bot focused in 100% at to become radio station. Create new playlist and bot will automatically download songs and play them randomly. Commands has been reduced to minimum because Akira can do all hard stuff automatically for you - just show her where should join and she will join and surprise you with music quality.
 
 # 👋 Getting started
 1. Install all required programs & prepare bot files. [Click here to get more info.](https://github.com/Razzels0/Akira/blob/master/.github/INSTALLATION.md)
@@ -23,6 +21,8 @@
 BOT_TOKEN=Njc4MzQqMzM4NTA0MzY3MDv0.XkhYmg.ZY_D9S7Ug-GxbbdLidbjBf5JXj7
 CLIENT_ID=678341338504364074
 OWNERS=390394829789593601, 215553356452724747
+DEFAULT_PLAYLIST_TAG=AMS
+DEFAULT_VOLUME=35
 ```
 > If you don't have your own bot yet - [Create one](https://discord.com/developers/applications) <br />
 
@@ -51,7 +51,7 @@ OWNERS=390394829789593601, 215553356452724747
 6. Submit a pull request
 
 ## Author
-**Akira** © [Razzels](https://github.com/Razzels0) <br />
-Authored and maintained by Razzels. <br />
-> Github [@Razzels0](https://github.com/Razzels0) <br />
-> Discord `Razzels#8039`
+**Akira** © [Znudzony](https://github.com/Znudzony) <br />
+Authored and maintained by Znudzony. <br />
+> Github [@Znudzony](https://github.com/Znudzony) <br />
+> Discord `Znudzony#8039`
